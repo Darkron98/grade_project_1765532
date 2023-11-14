@@ -5,16 +5,26 @@ const firestore = firebase.firestore();
 const createUser = async (req, res, next) => {
     try{
         const data = req.body;
-        const userDoc = await firestore.collection('user').doc(data.user_name);
-        const userSnapshot = await userDoc.get();
 
-        if(userSnapshot.exists){
-            res.status(400).json({
-                msg: 'user already exists' 
+        const userDoc = await firestore.collection('user').where('user_name', '==', data.user_name).get();
+        const userSnapshot = [];
+
+        userDoc.docs.forEach(doc => {
+            userSnapshot.push(doc);
+        });
+
+        if(userSnapshot[0].exists){
+            return res.status(404).json({
+                msg: 'user [' + user_name + '] already exists' 
             });
         } else {
             const {first_name, last_name, mail, phone, second_name} = data;
-            const {password, rol, user_name} = data;
+            const {rol, user_name} = data;
+
+            let {password} = data;
+            const salt = bcrypt.genSaltSync();
+            password = bcrypt.hashSync(password, salt);
+
             const user = await firestore.collection('user').add({
                 password, 
                 rol, 

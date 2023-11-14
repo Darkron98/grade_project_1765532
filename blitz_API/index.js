@@ -4,6 +4,7 @@ const bodyParser= require('body-parser');
 const config = require('./config');
 
 const userRoutes = require('./v1/routes/user.router');
+const authRoutes = require('./v1/routes/auth.router');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.get('', (req,res) => res.send('Me corro! 7w7'));
 
 app.use('/api/v1/user', userRoutes.routes);
+app.use('/api/v1/auth', authRoutes.routes);
 
 async function main(){
     try{
