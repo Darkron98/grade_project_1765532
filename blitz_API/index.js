@@ -1,10 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser= require('body-parser');
-const config = require('./config');
 
+const bodyParser = require('body-parser');
+const express = require('express');
+const config = require('./config');
+const cors = require('cors');
+
+const employeeRoutes = require('./v1/routes/employee.router');
 const userRoutes = require('./v1/routes/user.router');
 const authRoutes = require('./v1/routes/auth.router');
+const addressRoutes = require('./v1/routes/address.router');
+const menuRoutes = require('./v1/routes/menu.router');
 
 const app = express();
 
@@ -12,10 +16,16 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('', (req,res) => res.send('Me corro! 7w7'));
+app.get('', (req,res) => res.status(200).json({
+        msg: "Server running in port "+ config.port
+    })
+);
 
 app.use('/api/v1/user', userRoutes.routes);
 app.use('/api/v1/auth', authRoutes.routes);
+app.use('/api/v1/employee', employeeRoutes.routes);
+app.use('/api/v1/address', addressRoutes.routes);
+app.use('/api/v1/menu', menuRoutes.routes);
 
 async function main(){
     try{

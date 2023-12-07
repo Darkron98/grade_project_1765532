@@ -15,11 +15,22 @@ const generateToken = async(usuario) =>{
     );
 }
 
-const verifyToken = async (token)=>{
+const verifyToken = (authorization) => { 
     try{
-        return jwt.verify(token, process.env.JWT_SECRET);
+        const token = authorization.split(' ')[1];
+        let decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return {
+            decoded: decoded,
+            status: true,
+            statusCode: 200
+        }
     }catch(e){
-        return null;
+        return {
+            msg: 'invalid token',
+            error: e,
+            status: false,
+            statusCode: 403
+        };
     }
 }
 

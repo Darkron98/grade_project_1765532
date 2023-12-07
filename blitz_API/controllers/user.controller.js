@@ -1,157 +1,119 @@
+const userServices = require('../services/user.service');
 const firebase = require('../database/connection');
-const User = require('../database/models/user.model');
 const firestore = firebase.firestore();
+const {verifyToken}= require('../helpers/jwt');
 
-const createUser = async (req, res, next) => {
+const createUser = async (req, res) => {
     try{
         const data = req.body;
-
         const userDoc = await firestore.collection('user').where('user_name', '==', data.user_name).get();
         const userSnapshot = [];
-
         userDoc.docs.forEach(doc => {
             userSnapshot.push(doc);
         });
+        if(userSnapshot.length != 0){
+            if(userSnapshot[0].exists){
+                return res.status(404).json({
+                    msg: 'user [' + user_name + '] already exists' 
+                });
+            } 
+        }
+        await userServices.createService(data, res); 
+    }catch(e){
+        return res.status(400).json({
+            msg: 'bad request'
+        });
+    }
+}
 
-        if(userSnapshot[0].exists){
-            return res.status(404).json({
-                msg: 'user [' + user_name + '] already exists' 
+const getAll = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+    
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else if(auth.decoded.rol != 1){
+            return res.status(401).json({
+                msg: 'unauthorized'
             });
         } else {
-            const {first_name, last_name, mail, phone, second_name} = data;
-            const {rol, user_name} = data;
-
-            let {password} = data;
-            const salt = bcrypt.genSaltSync();
-            password = bcrypt.hashSync(password, salt);
-
-            const user = await firestore.collection('user').add({
-                password, 
-                rol, 
-                user_name
-            });
-            
-            const user_id = user.id;
-            const userData = await firestore.collection('user_data').add({
-                first_name, 
-                last_name, 
-                mail, phone, 
-                second_name,
-                user_id
-            });
-                
-            res.status(200).json({
-                msg: 'register successfuly'    
-            });
-        }
-    }  
-    catch(e){
-        res.status(400).json({
-            msg: 'register error',
-            error: e
-        });
-    }
-}
-
-const getAll = async (req, res, next) => {
-    try{
-        const users = await firestore.collection('user');
-        const data =  await users.get();
-        const userList = [];
-        if(data.empty){
-            res.status(404).json({
-                msg: 'no data'
-            });
-        }else{
-            data.docs.forEach(doc => {
-                const user = new User(
-                    doc.data().rol,
-                    doc.data().user_name
-                    );
-                    userList.push(user);
-            });
-            res.status(200).json({
-                msg: 'OK',
-                user_list: userList
-            });
+            await userServices.getAllService(res);
         }
     }catch(e){
-        res.status(400).json({
-            msg: 'bad request',
-            error: e
+        return res.status(401).json({
+            msg: 'unauthorized'
         });
     }
 }
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
     try{
-        const id = req.params.id;
-        const user = await firestore.collection('user').doc(id);
-        const userSnapshot = await user.get();
-
-        const user_id = userSnapshot.id;
-
-        const userDataQuery= await firestore.collection('user_data').where('user_id', '==', user_id).get();
-        const userDataSnapshot = [];
-        userDataQuery.forEach(doc => {
-            userDataSnapshot.push(doc);
-        });
-
-        if(!userSnapshot.exists){
-            res.status(404).json({
-                msg: 'user with ID:' + id +' dont exists'
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+    
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
             });
-        }else{
-            const {rol, user_name} = userSnapshot.data();
-            const userResp = new User(
-                rol, 
-                user_name
-            );
-            res.status(200).json({
-                msg: 'OK',
-                user: userResp,
-                user_data: userDataSnapshot[0].data()
-            })
+        } else if(auth.decoded.rol != 1){
+            return res.status(401).json({
+                msg: 'unauthorized'
+            });
+        } else {
+            await userServices.getByIdService(req, res);
         }
     }catch(e){
-        res.status(400).json({
-            msg: 'bad request',
-            error: e
-        })
+        return res.status(401).json({
+            msg: 'unauthorized'
+        });
+    }   
+}
+
+const updateUser = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+    
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else if(auth.decoded.rol != 1){
+            return res.status(401).json({
+                msg: 'unauthorized'
+            });
+        } else {
+            await userServices.updateService(req, res);
+        }
+    }catch(e){
+        return res.status(401).json({
+            msg: 'unauthorized'
+        });
     }
 }
 
-const updateUser = async (req, res, next) => {
+const deleteUser = async (req, res) =>{
     try{
-        const id = req.params.id;
-        const data = req.body;
-        const user = await firestore.collection('user').doc(id);
-        await user.update(data);
-
-        res.status(200).json({
-            msg: 'user updated' 
-        });
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+    
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else if(auth.decoded.rol != 1){
+            return res.status(401).json({
+                msg: 'unauthorized'
+            });
+        } else {
+            await userServices.deleteUserService(req, res);
+        }
     }catch(e){
-        res.status(400).json({
-            msg: 'bad request',
-            error: e
-        });
-    }
-}
-
-const deleteUser = async (req, res, next) =>{
-    try{
-        const id = req.params.id;
-        const data= req.body;
-        const user = await firestore.collection('user').doc(id).delete();
-
-        res.status(200).json({
-            msg: 'user deleted' 
-        });
-    }catch(e){
-        res.status(400).json({
-            msg: 'bad request',
-            error: e
+        return res.status(401).json({
+            msg: 'unauthorized'
         });
     }
 }

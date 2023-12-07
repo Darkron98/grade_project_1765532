@@ -1,7 +1,7 @@
 const {verifyToken}= require('../helpers/jwt');
-const services = require('../services/employee.service');
+const services = require('../services/menu.service');
 
-const createEmployee = async (req, res) => {
+const createDish = async (req, res)=>{
     try{
         const {authorization} = req.headers;
         const auth = verifyToken(authorization);
@@ -25,7 +25,7 @@ const createEmployee = async (req, res) => {
     }
 }
 
-const getAll = async (req, res, next) => {
+const getDish = async (req, res) => {
     try{
         const {authorization} = req.headers;
         const auth = verifyToken(authorization);
@@ -34,12 +34,9 @@ const getAll = async (req, res, next) => {
             return res.status(auth.statusCode).json({
                 msg: auth.msg
             });
-        } else if(auth.decoded.rol != 1){
-            return res.status(401).json({
-                msg: 'unauthorized'
-            });
+        } else {
+            await services.getService(req, res);
         }
-        await services.getAllService(req, res); 
     }catch(e){
         res.status(401).json({
             msg: 'unauthorized',
@@ -48,7 +45,7 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const getByIdDoc = async (req, res) => { 
+const updateDish = async (req, res)=>{
     try{
         const {authorization} = req.headers;
         const auth = verifyToken(authorization);
@@ -61,8 +58,9 @@ const getByIdDoc = async (req, res) => {
             return res.status(401).json({
                 msg: 'unauthorized'
             });
+        } else {
+            await services.updateService(req, res);
         }
-        await services.getByIdDocService(req, res);
     }catch(e){
         res.status(401).json({
             msg: 'unauthorized',
@@ -71,7 +69,7 @@ const getByIdDoc = async (req, res) => {
     }
 }
 
-const fireEmployee = async (req, res) => {
+const deleteDish = async (req, res)=>{
     try{
         const {authorization} = req.headers;
         const auth = verifyToken(authorization);
@@ -84,31 +82,9 @@ const fireEmployee = async (req, res) => {
             return res.status(401).json({
                 msg: 'unauthorized'
             });
+        } else {
+            await services.deleteService(req, res);
         }
-        await services.fireEmployeeService(req, res);
-    }catch(e){
-        res.status(401).json({
-            msg: 'unauthorized',
-            error: e
-        });
-    }
-}
-
-const updateEmployee = async (req, res) => {
-    try{
-        const {authorization} = req.headers;
-        const auth = verifyToken(authorization);
-
-        if(!auth.status){
-            return res.status(auth.statusCode).json({
-                msg: auth.msg
-            });
-        } else if(auth.decoded.rol != 1){
-            return res.status(401).json({
-                msg: 'unauthorized'
-            });
-        }
-        await services.updateService(req, res);
     }catch(e){
         res.status(401).json({
             msg: 'unauthorized',
@@ -118,9 +94,8 @@ const updateEmployee = async (req, res) => {
 }
 
 module.exports = {
-    createEmployee,
-    getAll,
-    getByIdDoc,
-    fireEmployee,
-    updateEmployee
+    createDish,
+    getDish,
+    updateDish,
+    deleteDish,
 }
