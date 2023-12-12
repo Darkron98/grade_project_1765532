@@ -1,0 +1,8 @@
+type: object
+properties:
+  lat:
+    type: number
+  lng: 
+    type: number
+  adress_name:
+    type: string

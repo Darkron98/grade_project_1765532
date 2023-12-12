@@ -3,9 +3,9 @@ const {createAdress, updateAdress, getAddressByUser,deleteAdress} = require('../
 const router = express.Router();
 
 router.post('/create', createAdress);
-router.put('/update/:id', updateAdress);
+router.put('/update=:id', updateAdress);
 router.get('', getAddressByUser);
-router.delete('/delete/:id',deleteAdress);
+router.delete('/delete=:id',deleteAdress);
 
 module.exports = {
     routes: router

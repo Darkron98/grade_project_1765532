@@ -1,0 +1,19 @@
+type: object
+properties:
+  msg:
+    type: string
+  data:
+    type: array
+    items:
+      type: object
+      properties:
+        category_id:
+          type: string
+        description:
+          type: string
+        dish_name:
+          type: string
+        label_img:
+          type: string
+        price:
+          type: number

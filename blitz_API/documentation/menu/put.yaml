@@ -1,0 +1,10 @@
+type: object
+properties:
+  description:
+    type: string
+  dish_name:
+    type: string
+  label_img:
+    type: string
+  price:
+    type: number
