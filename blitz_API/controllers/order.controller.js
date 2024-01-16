@@ -113,10 +113,31 @@ const getAll = async (req, res) => {
     }
 }
 
+const updateOrderItem = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else {
+            await services.updateOrderItem(req, res);
+        }
+    }catch(e){
+        res.status(401).json({
+            msg: 'unauthorized',
+            error: e
+        });
+    }
+}
+
 module.exports = {
     createOrder,
     takeOrder,
     cancelOrder,
     shippedOrder,
-    getAll
+    getAll,
+    updateOrderItem
 }

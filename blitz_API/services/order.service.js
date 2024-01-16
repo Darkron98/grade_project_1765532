@@ -108,19 +108,20 @@ const getService = async (req, res) => {
       orderSnapshot.push(doc);
     });
 
-    const orderRes = orderSnapshot.map(e => {
+    const orderRes = orderSnapshot.map(doc => {
+      const data = doc.data;
       return{
-        address_name: e.data.address_name,
-        lat: e.data.lat,
-        lng: e.data.lng,
-        owner: e.data.user,
-        owner_id: e.data.user_id,
-        total_price: e.data.total_price,
-        date: e.data.date,
-        state: e.data.state,
-        taken: e.data.taken,
-        delivery_id: e.data.delivery_id,
-        canceled: e.data.canceled,
+        address_name: doc.data().address_name,
+        lat: doc.data().lat,
+        lng: doc.data().lng,
+        owner: doc.data().user,
+        owner_id: doc.data().user_id,
+        total_price: doc.data().total_price,
+        date: doc.data().date,
+        state: doc.data().state,
+        taken: doc.data().taken,
+        delivery_id: doc.data().delivery_id,
+        canceled: doc.data().canceled,
     };
     });
 
@@ -135,10 +136,33 @@ const getService = async (req, res) => {
   }
 }
 
+const updateOrderItem = async (req, res) => {
+  try{
+    const data = req.body;
+    const order_id = req.params.orderId;
+    const item_id = req.params.itemId;
+
+    const orderItemQuery = await firestore.collection('order').doc(order_id).collection('items').doc(item_id).update(
+      {
+        quantity: data.quantity,
+        observations: data.observations,
+      }
+    );
+    res.status(200).json({
+      msg: "Order item updated succesfully"
+    })
+  }catch (e){
+    res.status(500).json({
+      msg: "Internal server error"
+    });
+  }
+}
+
 module.exports = {
     createService,
     takeService,
     cancelService,
     shippedService,
     getService,
+    updateOrderItem,
 }
