@@ -133,11 +133,32 @@ const updateOrderItem = async (req, res) => {
     }
 }
 
+const deleteOrderItem = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else {
+            await services.deleteOrderItem(req, res);
+        }
+    }catch(e){
+        res.status(401).json({
+            msg: 'unauthorized',
+            error: e
+        });
+    }
+}
+
 module.exports = {
     createOrder,
     takeOrder,
     cancelOrder,
     shippedOrder,
     getAll,
-    updateOrderItem
+    updateOrderItem,
+    deleteOrderItem,
 }
