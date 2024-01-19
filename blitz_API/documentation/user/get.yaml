@@ -1,0 +1,26 @@
+type: object
+properties:
+  msg:
+    type: string
+  user:
+    type: object
+    properties:
+      rol:
+        type: string
+      user_name:
+        type: string
+  user_data:
+    type: object
+    properties:
+      first_name:
+        type: string
+      mail:
+        type: string
+      last_name:
+        type: string
+      phone:
+        type: string
+      second_name:
+        type: string
+      user_id:
+        typr: string

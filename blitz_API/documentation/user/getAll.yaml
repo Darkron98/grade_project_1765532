@@ -1,0 +1,14 @@
+type: object
+properties:
+  msg:
+    type: string
+  user_list:
+    type: array
+    items:
+      type: object
+      properties:
+        rol:
+          type: number
+        user_name:
+          type: string
+
