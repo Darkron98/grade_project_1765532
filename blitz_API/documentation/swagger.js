@@ -18,7 +18,9 @@ const options = {
   // looks for configuration in specified directories
   apis: ['./v1/routes/*.js','./documentation/components.yaml'],
 }
+
 const swaggerSpec = swaggerJsdoc(options);
+
 function swaggerDocs(app, port) {
   // Swagger Page
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true, customCss: '.swagger-ui .topbar { display: none }', customJs: '/no-cache.js' }))
