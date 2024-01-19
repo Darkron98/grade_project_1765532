@@ -10,6 +10,7 @@ const authRoutes = require('./v1/routes/auth.router');
 const addressRoutes = require('./v1/routes/address.router');
 const menuRoutes = require('./v1/routes/menu.router');
 const orderRoutes = require('./v1/routes/order.router');
+const swaggerDocs = require('./documentation/swagger');
 
 const app = express();
 
@@ -34,7 +35,8 @@ async function main(){
         app.listen(
             config.port,
             ()=>console.log("Server running in port "+ config.port)
-        );    
+        ); 
+        swaggerDocs.swaggerDocs(app, config.port);   
     }catch(e){
         throw new Error(e);
     }

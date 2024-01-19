@@ -1,8 +1,0 @@
-type: object
-properties:
-  password:
-    type: string
-  user_name:
-    type: string
-  rol:
-    type: string
