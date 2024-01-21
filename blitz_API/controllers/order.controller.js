@@ -30,7 +30,7 @@ const takeOrder = async (req, res) => {
             return res.status(auth.statusCode).json({
                 msg: auth.msg
             });
-        } else if(auth.decoded.rol != 2){
+        } else if(auth.decoded.rol != 2 && auth.decoded.rol != 1){
             return res.status(401).json({
                 msg: 'unauthorized'
             });
@@ -74,7 +74,7 @@ const shippedOrder = async (req, res) => {
             return res.status(auth.statusCode).json({
                 msg: auth.msg
             });
-        } else if(auth.decoded.rol != 2){
+        } else if(auth.decoded.rol != 2 && auth.decoded.rol !=1){
             return res.status(401).json({
                 msg: 'unauthorized'
             });

@@ -1,6 +1,7 @@
 const express = require('express');
-const {createOrder, takeOrder, cancelOrder, shippedOrder, getAll, updateOrderItem,deleteOrderItem} = require('../../controllers/order.controller');
+const {createOrder, takeOrder, cancelOrder, shippedOrder, getAll, updateOrderItem, deleteOrderItem} = require('../../controllers/order.controller');
 const router = express.Router();
+
 
 router.post('/create', createOrder);
 router.patch('/take=:id', takeOrder);

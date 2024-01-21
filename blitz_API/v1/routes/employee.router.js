@@ -2,7 +2,7 @@ const express = require('express');
 const {createEmployee, getAll, getByIdDoc, fireEmployee, updateEmployee} = require('../../controllers/employee.controller');
 const router = express.Router();
 
-/** 
+/** Create
  * @openapi
  * '/employee/create':
  *   post:
@@ -50,7 +50,7 @@ const router = express.Router();
 */
 router.post('/create', createEmployee);
 
-/** 
+/** Get all
  * @openapi
  * '/employee':
  *   get:
@@ -114,7 +114,7 @@ router.post('/create', createEmployee);
 */
 router.get('', getAll);
 
-/** 
+/** Get by DNI
  * @openapi
  * '/employee/id':
  *   get:
@@ -178,7 +178,7 @@ router.get('', getAll);
 */
 router.get('/:id', getByIdDoc);
 
-/** 
+/**  Dismiss
  * @openapi
  * '/employee/dismiss=id':
  *   patch:
@@ -208,13 +208,13 @@ router.get('/:id', getByIdDoc);
 */
 router.patch('/dismiss=:id', fireEmployee);
 
-/** 
+/** Update
  * @openapi
  * '/employee/update=id':
  *   put:
  *     tags:
  *       - Employee
- *     description: Dismiss an active employee by DNI provided
+ *     description: Update an active employee by DNI provided
  *     parameters:
  *       - name: id
  *         in: path

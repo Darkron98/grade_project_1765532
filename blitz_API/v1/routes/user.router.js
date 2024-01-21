@@ -3,7 +3,7 @@ const {createUser, getAll, getById, updateUser, deleteUser} = require('../../con
 
 const router = express.Router();
 
-/**
+/** Create
  * @openapi
  * '/user/create':
  *     post:
@@ -36,7 +36,7 @@ const router = express.Router();
 */          
 router.post('/create',createUser);
 
-/**
+/** Get all
  * @openapi
  * '/user':
  *     get:
@@ -77,7 +77,7 @@ router.post('/create',createUser);
 */
 router.get('', getAll);
 
-/**
+/** Get by ID
  * @openapi
  * '/user/id':
  *     get:
@@ -137,7 +137,7 @@ router.get('', getAll);
 */
 router.get('/:id', getById);
 
-/**
+/** Update
  * @openapi 
  * '/user/update=id':
  *   put:
@@ -180,7 +180,7 @@ router.get('/:id', getById);
 */
 router.put('/update=:id', updateUser);
 
-/**
+/** Delete
  * @openapi
  * '/user/delete=id':
  *     delete:

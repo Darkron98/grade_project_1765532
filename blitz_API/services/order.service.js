@@ -24,14 +24,19 @@ const createService = async (req, res, user) => {
     });
 
     const order_id = orderCreate.id;
-
-    data.items.forEach(async (e) => await firestore.collection('order').doc(orderCreate.id).collection('items').add({
+    var idlist =[];
+    await data.items.forEach(async (e) => {
+        var orderItemQuery = await firestore.collection('order').doc(orderCreate.id).collection('items').add({
         item_desc: e.item_desc,
         item_id: e.item_id,
         observations: e.observations,
         quantity: e.quantity,
         unit_price: e.unit_price
-    }));
+        }   
+      );
+      const item_id = orderItemQuery.id;
+      idlist.push(item_id);
+    });
 
     const orderQuery = await firestore.collection('order').doc(order_id).get();
     const orderItemsQuery = await firestore.collection('order').doc(order_id).collection('items').get();
@@ -43,7 +48,7 @@ const createService = async (req, res, user) => {
     });
 
     orderItemSnapshot.forEach((e) => {
-      itemList.push(new {
+      itemList.push({
         id: e.id,
         item_desc: e.data().item_desc,
         item_id: e.data().item_id,
@@ -145,6 +150,7 @@ const getService = async (req, res) => {
     const orderRes = orderSnapshot.map(doc => {
       const data = doc.data;
       return{
+        id: doc.id,
         address_name: doc.data().address_name,
         lat: doc.data().lat,
         lng: doc.data().lng,
@@ -195,7 +201,7 @@ const updateOrderItem = async (req, res) => {
 const deleteOrderItem = async (req, res) => {
   try{
     const order_id = req.params.orderId;
-    const item_id = req.params.orderId;
+    const item_id = req.params.itemId;
     
     const deleteQuery = await firestore.collection('order').doc(order_id).collection('items').doc(item_id).delete();
 
@@ -211,6 +217,10 @@ const deleteOrderItem = async (req, res) => {
 
 const addOrderItem = async (req, res) => {
   
+}
+
+const getItemsByOrder = async (req, res) => {
+
 }
 
 module.exports = {

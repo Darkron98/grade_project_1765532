@@ -2,7 +2,7 @@ const controller = require('../../controllers/menu.controller');
 const express = require('express');
 const router = express.Router();
 
-/**
+/** Create
  * @openapi
  * '/menu/create':
  *    post:
@@ -41,7 +41,7 @@ const router = express.Router();
 */
 router.post('/create', controller.createDish);
 
-/** 
+/** Get all
  * @openapi 
  * '/menu':
  *     get:
@@ -78,7 +78,7 @@ router.post('/create', controller.createDish);
 */
 router.get('', controller.getDish);
 
-/**
+/** Update
  * @openapi
  * '/menu/update=id':
  *     put:
@@ -121,7 +121,7 @@ router.get('', controller.getDish);
 */
 router.put('/update=:id', controller.updateDish);
 
-/**
+/** Delete
  * @openapi
  * '/menu/delete=id':
  *     delete:
@@ -150,7 +150,6 @@ router.put('/update=:id', controller.updateDish);
  *           description: Successful operation
 */
 router.delete('/delete=:id', controller.deleteDish);
-
 
 module.exports = {
     routes: router,

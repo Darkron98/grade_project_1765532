@@ -3,7 +3,7 @@ const {createAdress, updateAdress, getAddressByUser,deleteAdress} = require('../
 
 const router = express.Router();
 
-/**
+/** Create
  * @openapi
  * /address/create:
  *     post:
@@ -30,7 +30,7 @@ const router = express.Router();
 */
 router.post('/create', createAdress);
 
-/**
+/** Update
  * @openapi
  * '/address/update=id':
  *     put:
@@ -64,7 +64,7 @@ router.post('/create', createAdress);
 */
 router.put('/update=:id', updateAdress);
 
-/**
+/** Get all
  * @openapi
  * '/address':
  *     get:
@@ -99,7 +99,7 @@ router.put('/update=:id', updateAdress);
 */
 router.get('', getAddressByUser);
 
-/**
+/** Delete
  * @openapi
  * '/address/delete=id':
  *     delete:
