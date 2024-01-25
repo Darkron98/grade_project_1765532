@@ -173,6 +173,26 @@ const addOrderItem = async (req, res) => {
     }
 }
 
+const getItemsByOrder = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else {
+            await services.getItemsByOrder(req, res);
+        }
+    }catch(e){
+        res.status(401).json({
+            msg: 'unauthorized',
+            error: e
+        });
+    }
+  }
+
 module.exports = {
     createOrder,
     takeOrder,
@@ -181,5 +201,6 @@ module.exports = {
     getAll,
     updateOrderItem,
     deleteOrderItem,
-    addOrderItem
+    addOrderItem,
+    getItemsByOrder
 }

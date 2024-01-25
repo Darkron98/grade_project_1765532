@@ -240,7 +240,33 @@ const addOrderItem = async (req, res) => {
 }
 
 const getItemsByOrder = async (req, res) => {
+  try{
+    const order_id = req.params.id;
+    const orderItemsQuery = await firestore.collection('order').doc(order_id).collection('items').get();
+    orderItemSnapshot = [];
+    itemList = [];
 
+    orderItemsQuery.forEach(doc => {
+      orderItemSnapshot.push(doc);
+    });
+
+    orderItemSnapshot.forEach((e) => {
+      itemList.push({
+        id: e.id,
+        item_desc: e.data().item_desc,
+        item_id: e.data().item_id,
+        observations: e.data().observations,
+        quantity: e.data().quantity,
+        unit_price: e.data().unit_price
+      });
+    });
+
+    res.status(200).json(itemList);
+  }catch (e){
+    res.status(500).json({
+      msg: "Internal server error"
+    });
+  }
 }
 
 module.exports = {
@@ -251,5 +277,6 @@ module.exports = {
     getService,
     updateOrderItem,
     deleteOrderItem,
-    addOrderItem
+    addOrderItem,
+    getItemsByOrder
 }
