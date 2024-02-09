@@ -1,2 +1,5 @@
-/blitz_API/node_modules/
+/blitz_API/node_modules
 /blitz_API/.env
+node_modules
+package-lock.json
+package.json
