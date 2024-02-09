@@ -5,13 +5,17 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'BLITZ APP',
+      title: 'BLITZ APP API',
       version: '1.0.0',
     },
     servers: [
       {
-        url: "http://localhost:3000/api/v1",
+        url: "http://localhost:8080/api/v1",
         description: "Local server"
+      },
+      {
+        url: "https://blitz-api-dev.fly.dev/api/v1",
+        description: "Host server"
       },
     ]
   },

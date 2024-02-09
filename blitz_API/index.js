@@ -36,7 +36,7 @@ app.use('/api/v1/order', orderRoutes.routes);
 async function main(){
     try{
         app.listen(
-            config.port,
+            config.port || 8080,
             () => console.log("Server running in port "+ config.port)
         ); 
         swaggerDocs.swaggerDocs(app, config.port);   
