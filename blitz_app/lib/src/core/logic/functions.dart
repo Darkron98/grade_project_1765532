@@ -37,3 +37,5 @@ void getLocationPermission() async {
     print('permiso de ubicacion denegado');
   }
 }
+
+bool validateLogin(String user, String pass) => user.isEmpty || pass.isEmpty;

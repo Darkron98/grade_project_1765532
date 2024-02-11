@@ -32,25 +32,50 @@ class _Tittle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
-        Padding(
-          padding: EdgeInsets.only(
-            top: 20,
-            left: 10,
-            right: 10,
-          ),
-          child: Text(
-            'Seguimiento',
-            style: TextStyle(
-              color: ColorPalette.textColor,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(
+                top: 20,
+                left: 10,
+                right: 10,
+              ),
+              child: Text(
+                'Seguimiento',
+                style: TextStyle(
+                  color: ColorPalette.textColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
+            SizedBox(),
+          ],
         ),
-        SizedBox(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(
+                top: 20,
+                left: 10,
+                right: 10,
+              ),
+              child: Text(
+                'Pedidos',
+                style: TextStyle(
+                  color: ColorPalette.textColor,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(),
+          ],
+        ),
       ],
     );
   }

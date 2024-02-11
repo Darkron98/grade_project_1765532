@@ -15,7 +15,6 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var bloc = BlocProvider.of<AuthBloc>(context);
     getLocationPermission();
     return Scaffold(
       backgroundColor: ColorPalette.background,
@@ -52,13 +51,39 @@ class Login extends StatelessWidget {
                                     .add(TypePass(value)),
                           ),
                           const RemainUser(),
-                          LoginButton(
-                            size: size,
-                            onPressed: () {
-                              BlocProvider.of<HomeBloc>(context)
-                                  .add(const ChangePage(0));
-                              Navigator.pushNamed(context, 'home');
+                          BlocListener<AuthBloc, AuthState>(
+                            listener: (context, state) {
+                              if (state.success) {
+                                Navigator.pushNamed(context, 'home');
+                              }
                             },
+                            child: LoginButton(
+                              size: size,
+                              color: state.loading ||
+                                      validateLogin(state.userName, state.pass)
+                                  ? ColorPalette.unFocused
+                                  : ColorPalette.primary,
+                              onPressed: state.loading ||
+                                      validateLogin(state.userName, state.pass)
+                                  ? null
+                                  : () {
+                                      BlocProvider.of<AuthBloc>(context)
+                                          .add(const Submitted());
+                                    },
+                              child: state.loading
+                                  ? const SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: CircularProgressIndicator(
+                                        color: ColorPalette.primary,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Ingresar',
+                                      style: TextStyle(
+                                          color: ColorPalette.textColor),
+                                    ),
+                            ),
                           ),
                           RegisterLabel(
                             pageController: _pageController,
@@ -88,9 +113,7 @@ class Login extends StatelessWidget {
 }
 
 class _Tittle extends StatelessWidget {
-  const _Tittle({
-    super.key,
-  });
+  const _Tittle();
 
   @override
   Widget build(BuildContext context) {

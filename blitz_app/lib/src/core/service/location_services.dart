@@ -18,7 +18,7 @@ class LocationServices extends LocationServicesInterface {
           queryParameters: {
             'origin': '${origin.latitude},${origin.longitude}',
             'destination': '${destination.latitude},${destination.longitude}',
-            'key': 'AIzaSyCeiMSlKuKQiyJOJcjQ4B5k8AtLEP_fr_A',
+            'key': 'AIzaSyD9KHPOIW5Mka2Kt6eTmZzzW6jj7RgxDZQ',
           });
 
       final data = Map<String, dynamic>.from(response.data['routes'][0]);

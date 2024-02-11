@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:grade_project_1765532/src/core/model/auth_resp.dart';
+import 'package:grade_project_1765532/src/core/service/login_services.dart';
 import 'package:meta/meta.dart';
 
 import '../../core/model/auth_user.dart';
@@ -21,7 +23,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     on<Submitted>(
-      (event, emit) {},
+      (event, emit) async {
+        emit(state.copyWith(loading: true));
+        User user = User(
+          user: state.userName,
+          pass: state.pass,
+        );
+        AuthResp authdata = await LoginServices().userAuthenticate(user);
+
+        emit(state.copyWith(
+          success: authdata.statusCode.startsWith('2'),
+          failure: !RegExp(r'^2').hasMatch(authdata.statusCode),
+        ));
+        emit(state.copyWith(loading: false, success: false, failure: false));
+      },
     );
   }
 }

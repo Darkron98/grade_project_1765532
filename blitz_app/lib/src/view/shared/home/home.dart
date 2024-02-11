@@ -159,7 +159,7 @@ class BottomNavBar extends StatelessWidget {
                     curve: Curves.easeInOut,
                   );
                 },
-                icon: Remix.user_line,
+                icon: Remix.settings_3_fill,
                 color: state.indexPage == 3
                     ? ColorPalette.primary
                     : ColorPalette.unFocused,
