@@ -4,6 +4,7 @@ import 'package:grade_project_1765532/src/style/style.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../bloc/bloc.dart';
+import '../login/widget/widgets.dart';
 import 'widgets/widgets.dart';
 
 class Register extends StatelessWidget {
@@ -33,6 +34,12 @@ class Register extends StatelessWidget {
                 RegisterFormField(
                   size: size,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
+                      .add(TypeLastName(value)),
+                  label: 'Apellido',
+                ),
+                RegisterFormField(
+                  size: size,
+                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypeEmail(value)),
                   label: 'E-mail',
                 ),
@@ -41,6 +48,12 @@ class Register extends StatelessWidget {
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypePhone(value)),
                   label: 'Telefono',
+                ),
+                RegisterFormField(
+                  size: size,
+                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
+                      .add(TypeUserName(value)),
+                  label: 'Nombre de usuario',
                 ),
                 RegisterFormField(
                   size: size,
@@ -56,9 +69,32 @@ class Register extends StatelessWidget {
                       .add(ConfirmationPass(value)),
                   label: 'Confirmar contraseña',
                 ),
-                RegisterButton(
-                  size: size,
-                  onPressed: () {},
+                BlocListener<RegisterBloc, RegisterState>(
+                  listener: (context, state) {},
+                  child: CustomButton(
+                    size: size,
+                    color: state.loading
+                        ? ColorPalette.unFocused
+                        : ColorPalette.primary,
+                    onPressed: state.loading
+                        ? null
+                        : () {
+                            BlocProvider.of<RegisterBloc>(context)
+                                .add(const ValidateForm());
+                          },
+                    child: state.loading
+                        ? const SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: ColorPalette.primary,
+                            ),
+                          )
+                        : const Text(
+                            'Ingresar',
+                            style: TextStyle(color: ColorPalette.textColor),
+                          ),
+                  ),
                 ),
                 const SizedBox(),
               ],

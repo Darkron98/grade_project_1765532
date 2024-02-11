@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/auth/auth_bloc.dart';
 import 'package:grade_project_1765532/src/style/color/palette.dart';
 
-class LoginButton extends StatelessWidget {
-  const LoginButton(
+class CustomButton extends StatelessWidget {
+  const CustomButton(
       {super.key,
       required this.size,
       required this.onPressed,

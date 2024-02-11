@@ -57,7 +57,7 @@ class Login extends StatelessWidget {
                                 Navigator.pushNamed(context, 'home');
                               }
                             },
-                            child: LoginButton(
+                            child: CustomButton(
                               size: size,
                               color: state.loading ||
                                       validateLogin(state.userName, state.pass)

@@ -47,6 +47,22 @@ class ConfirmationPass extends RegisterEvent {
   List<Object> get props => [confPass];
 }
 
+class TypeLastName extends RegisterEvent {
+  const TypeLastName(this.lasName);
+  final String lasName;
+
+  @override
+  List<Object> get props => [lasName];
+}
+
+class TypeUserName extends RegisterEvent {
+  const TypeUserName(this.userName);
+  final String userName;
+
+  @override
+  List<Object> get props => [userName];
+}
+
 class ValidateForm extends RegisterEvent {
   const ValidateForm();
 
