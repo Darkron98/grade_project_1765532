@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/core/logic/functions.dart';
+import 'package:grade_project_1765532/src/view/admin/prefs/app_preferences.dart';
 
 import 'package:remixicon/remixicon.dart';
 
@@ -61,7 +62,8 @@ class HomeScreen extends StatelessWidget {
                     Menu(size: size),
                     ShoppingCart(size: size),
                     MapScreen(size: size),
-                    const Management(),
+                    //const Management(),
+                    AppPreferences(),
                   ],
                 ),
               ),
@@ -159,7 +161,7 @@ class BottomNavBar extends StatelessWidget {
                     curve: Curves.easeInOut,
                   );
                 },
-                icon: Remix.settings_3_fill,
+                icon: Remix.user_settings_line,
                 color: state.indexPage == 3
                     ? ColorPalette.primary
                     : ColorPalette.unFocused,
