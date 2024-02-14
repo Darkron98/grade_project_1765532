@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<double> getLocationLat() async {
@@ -31,6 +29,7 @@ Future<double> getLocationLong() async {
 
 void getLocationPermission() async {
   var status = await Permission.location.request();
+  var filePermission = await Permission.mediaLibrary.request();
   if (status.isGranted) {
     print('permiso de ubicacion aceptado');
   } else {
@@ -39,3 +38,6 @@ void getLocationPermission() async {
 }
 
 bool validateLogin(String user, String pass) => user.isEmpty || pass.isEmpty;
+
+Map<String, String> header(String token) =>
+    {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};

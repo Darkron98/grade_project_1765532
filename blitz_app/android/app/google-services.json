@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "75537837422",
+    "project_id": "blitzapp-a2a39",
+    "storage_bucket": "blitzapp-a2a39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75537837422:android:8c721ded6c02024c04257f",
+        "android_client_info": {
+          "package_name": "com.example.blitz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBTX1Ko9rtRm8i3LNOD58zbEttbLqkJs4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

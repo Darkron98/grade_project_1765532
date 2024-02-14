@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
 
+import '../logic/shared_preferences.dart';
 import '../model/auth_resp.dart';
 import '../model/auth_user.dart';
+import '../logic/constants.dart' as cons;
 
 abstract class LoginServicesInterface {
   Future<AuthResp> userAuthenticate(User user);
 }
 
 class LoginServices extends LoginServicesInterface {
+  final Preferences prefs = Preferences();
+
   @override
   Future<AuthResp> userAuthenticate(User user) async {
     Map<String, dynamic> body = {
@@ -17,7 +21,7 @@ class LoginServices extends LoginServicesInterface {
 
     try {
       Response response = await Dio().post(
-        'https://blitz-api-dev.fly.dev/api/v1/auth',
+        '${cons.host}/auth',
         data: body,
       );
 
@@ -29,6 +33,8 @@ class LoginServices extends LoginServicesInterface {
         token: respData["token"],
         statusCode: response.statusCode.toString(),
       );
+
+      prefs.token = data.token;
 
       return data;
     } catch (e) {

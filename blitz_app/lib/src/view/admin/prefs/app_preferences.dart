@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grade_project_1765532/src/view/admin/prefs/widget/create_dish.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../style/style.dart';
@@ -102,7 +103,7 @@ class _AdminOptionsState extends State<AdminOptions> {
                         size: 30,
                         color: ColorPalette.primary,
                       ),
-                      onTap: () {},
+                      onTap: () => createDishModal(context),
                     ),
                     GestureDetector(
                       child: const Icon(

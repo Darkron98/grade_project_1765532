@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grade_project_1765532/src/core/logic/functions.dart';
 import 'package:grade_project_1765532/src/view/admin/prefs/app_preferences.dart';
 
 import 'package:remixicon/remixicon.dart';
@@ -24,51 +24,57 @@ class HomeScreen extends StatelessWidget {
         size: size,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () =>
-                          Navigator.of(context).pushReplacementNamed('login'),
-                      child: Container(
-                        width: 45,
-                        height: 45,
-                        decoration: BoxDecoration(
-                            color: ColorPalette.lightBg,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Icon(
-                          Remix.logout_box_line,
-                          color: ColorPalette.primary,
-                          size: 22,
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+              systemNavigationBarColor: ColorPalette.background,
+              systemNavigationBarIconBrightness: Brightness.dark,
+              systemNavigationBarDividerColor: Colors.transparent),
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.of(context).pushReplacementNamed('login'),
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: ColorPalette.lightBg,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const Icon(
+                            Remix.logout_box_line,
+                            color: ColorPalette.primary,
+                            size: 22,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(),
-                  ],
+                      const SizedBox(),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: size.height - 180,
-                child: PageView(
-                  controller: pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    Menu(size: size),
-                    ShoppingCart(size: size),
-                    MapScreen(size: size),
-                    //const Management(),
-                    AppPreferences(),
-                  ],
+                SizedBox(
+                  height: size.height - 180,
+                  child: PageView(
+                    controller: pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      Menu(size: size),
+                      ShoppingCart(size: size),
+                      MapScreen(size: size),
+                      //const Management(),
+                      const AppPreferences(),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(),
-            ],
+                const SizedBox(),
+              ],
+            ),
           ),
         ),
       ),

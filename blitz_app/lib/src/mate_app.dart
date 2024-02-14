@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
 
 import 'bloc/bloc.dart';
 import 'core/routes/routes.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => MapBloc(),
+        ),
+        BlocProvider(
+          create: (context) => MenuPrefsBloc(),
         ),
       ],
       child: MaterialApp(

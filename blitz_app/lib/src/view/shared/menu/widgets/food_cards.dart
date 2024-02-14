@@ -57,10 +57,16 @@ class FoodCards extends StatelessWidget {
                             top: 10, left: 10, right: 10, bottom: 2),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(7.5),
-                          child: const Image(
+                          child: Container(
                             width: 210,
-                            image: NetworkImage(
-                              'https://comidasamericanas.net/wp-content/uploads/2021/10/Hamburguesas-americanas-1.jpg',
+                            height: (210 * 2) / 3,
+                            child: const FadeInImage(
+                              width: 210,
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                'https://comidasamericanas.net/wp-content/uploads/2021/10/Hamburguesas-americanas-1.jpg',
+                              ),
+                              placeholder: AssetImage('assets/loading.gif'),
                             ),
                           ),
                         ),

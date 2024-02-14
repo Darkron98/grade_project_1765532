@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:grade_project_1765532/src/core/model/register_user.dart';
 
+import '../logic/constants.dart' as cons;
+
 abstract class UserServiceInterface {
   Future<String> userRegister(RegisterInfo userInfo);
 }
@@ -20,7 +22,7 @@ class UserService extends UserServiceInterface {
 
     try {
       Response response = await Dio().post(
-        'https://blitz-api-dev.fly.dev/api/v1/user/create',
+        '${cons.host}/user/create',
         data: body,
       );
 
