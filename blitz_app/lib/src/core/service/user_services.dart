@@ -10,14 +10,15 @@ abstract class UserServiceInterface {
 class UserService extends UserServiceInterface {
   @override
   Future<String> userRegister(RegisterInfo userInfo) async {
+    var name = userInfo.name.split(' ');
     Map<String, dynamic> body = {
       "password": userInfo.password,
       "user_name": userInfo.userName,
-      "first_name": userInfo.name.split(' ')[0],
+      "first_name": name[0],
       "last_name": userInfo.lastName,
       "mail": userInfo.email,
       "phone": userInfo.phone,
-      "second_name": userInfo.name.split(' ')[1],
+      "second_name": name.length > 1 ? name[1] : '',
     };
 
     try {

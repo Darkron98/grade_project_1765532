@@ -7,18 +7,24 @@ class MenuPrefsState extends Equatable {
     this.description = '',
     this.labelImg = '',
     this.imgPath = '',
-    this.selectCategory = '',
+    this.selectCategoryId = '',
+    this.selectCategoryName = '',
     this.stateFlag = false,
     this.categories = const [],
+    this.menuDishes = const [],
     this.loadingCategories = false,
     this.loadingCreate = false,
+    this.failure = false,
+    this.success = false,
+    this.loadDishes = false,
   });
 
   final String dishName;
   final String description;
   final String labelImg;
   final String imgPath;
-  final String selectCategory;
+  final String selectCategoryId;
+  final String selectCategoryName;
 
   final double price;
 
@@ -26,8 +32,12 @@ class MenuPrefsState extends Equatable {
 
   final bool loadingCreate;
   final bool loadingCategories;
+  final bool loadDishes;
+  final bool success;
+  final bool failure;
 
   final List<Category> categories;
+  final List<MenuResp> menuDishes;
 
   MenuPrefsState copyWith({
     String? dishName,
@@ -35,11 +45,16 @@ class MenuPrefsState extends Equatable {
     String? description,
     String? labelImg,
     String? imgPath,
-    String? selectCategory,
+    String? selectCategoryId,
+    String? selectCategoryName,
     bool? stateFlag,
     bool? loadingCreate,
     bool? loadingCategories,
+    bool? failure,
+    bool? success,
+    bool? loadDishes,
     List<Category>? categories,
+    List<MenuResp>? menuDishes,
   }) =>
       MenuPrefsState(
         dishName: dishName ?? this.dishName,
@@ -51,7 +66,12 @@ class MenuPrefsState extends Equatable {
         categories: categories ?? this.categories,
         loadingCategories: loadingCategories ?? this.loadingCategories,
         loadingCreate: loadingCreate ?? this.loadingCreate,
-        selectCategory: selectCategory ?? this.selectCategory,
+        selectCategoryId: selectCategoryId ?? this.selectCategoryId,
+        selectCategoryName: selectCategoryName ?? this.selectCategoryName,
+        failure: failure ?? this.failure,
+        success: success ?? this.success,
+        menuDishes: menuDishes ?? this.menuDishes,
+        loadDishes: loadDishes ?? this.loadDishes,
       );
 
   @override
@@ -65,6 +85,11 @@ class MenuPrefsState extends Equatable {
         categories,
         loadingCreate,
         loadingCategories,
-        selectCategory,
+        selectCategoryId,
+        selectCategoryName,
+        failure,
+        success,
+        menuDishes,
+        loadDishes,
       ];
 }

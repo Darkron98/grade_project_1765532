@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/bloc.dart';
+import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/view/shared/register/register.dart';
+import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 
 import '../../../core/logic/functions.dart';
 import '../../../style/style.dart';
@@ -54,7 +56,17 @@ class Login extends StatelessWidget {
                           BlocListener<AuthBloc, AuthState>(
                             listener: (context, state) {
                               if (state.success) {
+                                customSnackbar(context,
+                                    message: 'Bienvenido!',
+                                    type: 'ok',
+                                    subtittle: Preferences().user);
                                 Navigator.pushNamed(context, 'home');
+                              } else if (state.failure) {
+                                customSnackbar(
+                                  context,
+                                  message: 'Ups! algo salio mal',
+                                  type: 'error',
+                                );
                               }
                             },
                             child: CustomButton(

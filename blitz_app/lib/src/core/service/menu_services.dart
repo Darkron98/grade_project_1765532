@@ -11,6 +11,8 @@ abstract class MenuServiceInterface {
   Future<String> createDish(MenuReq req);
   Future<List<Category>> getMenuCategories();
   Future<String> uploadImg(String path);
+  Future<List<MenuResp>> getMenuDishes();
+  Future<String> updateDish(DishUpdate req);
 }
 
 class MenuService extends MenuServiceInterface {
@@ -64,18 +66,84 @@ class MenuService extends MenuServiceInterface {
 
   @override
   Future<String> uploadImg(String path) async {
-    final File file = File(path);
+    try {
+      final File file = File(path);
 
-    final String fileName = file.path.split('/').last;
+      final String fileName = file.path.split('/').last;
 
-    Reference ref = storage.ref().child('images').child('menu').child(fileName);
+      Reference ref =
+          storage.ref().child('images').child('menu').child(fileName);
 
-    final UploadTask task = ref.putFile(file);
+      final UploadTask task = ref.putFile(file);
 
-    final TaskSnapshot snapShot = await task.whenComplete(() => true);
+      final TaskSnapshot snapShot = await task.whenComplete(() => true);
 
-    final String url = await snapShot.ref.getDownloadURL();
+      final String url = await snapShot.ref.getDownloadURL();
 
-    return url;
+      return url;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  @override
+  Future<List<MenuResp>> getMenuDishes() async {
+    try {
+      Response response = await Dio().get(
+        '${cons.host}/menu',
+        options: Options(headers: header(prefs.token)),
+      );
+
+      List data = response.data['data'];
+
+      List<MenuResp> resp = data
+          .map(
+            (e) => MenuResp(
+              dishId: e['dish_id'],
+              dishName: e['dish_name'],
+              categoryId: e['category_id'],
+              price: e['price'],
+              description: e['description'],
+              labelImg: e['label_img'],
+            ),
+          )
+          .toList();
+      return resp;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  @override
+  Future<String> updateDish(DishUpdate req) async {
+    Map<String, dynamic> body = {
+      if (req.categoryId != null) ...{
+        "category_id": req.categoryId,
+      },
+      if (req.description != null) ...{
+        "description": req.description,
+      },
+      if (req.dishName != null) ...{
+        "dish_name": req.dishName,
+      },
+      if (req.labelImage != null) ...{
+        "label_img": req.labelImage,
+      },
+      if (req.price != null) ...{
+        "price": req.price,
+      },
+    };
+
+    try {
+      Response response = await Dio().put(
+        '${cons.host}/menu/update=${req.dishId}',
+        data: body,
+        options: Options(headers: header(prefs.token)),
+      );
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return '400';
+    }
   }
 }

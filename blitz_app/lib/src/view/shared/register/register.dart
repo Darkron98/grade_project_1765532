@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/style/style.dart';
+import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../bloc/bloc.dart';
@@ -69,32 +70,48 @@ class Register extends StatelessWidget {
                       .add(ConfirmationPass(value)),
                   label: 'Confirmar contraseña',
                 ),
-                BlocListener<RegisterBloc, RegisterState>(
-                  listener: (context, state) {},
-                  child: CustomButton(
-                    size: size,
-                    color: state.loading
-                        ? ColorPalette.unFocused
-                        : ColorPalette.primary,
-                    onPressed: state.loading
-                        ? null
-                        : () {
-                            BlocProvider.of<RegisterBloc>(context)
-                                .add(const ValidateForm());
-                          },
-                    child: state.loading
-                        ? const SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: CircularProgressIndicator(
-                              color: ColorPalette.primary,
-                            ),
-                          )
-                        : const Text(
-                            'Ingresar',
-                            style: TextStyle(color: ColorPalette.textColor),
-                          ),
-                  ),
+                BlocBuilder<RegisterBloc, RegisterState>(
+                  builder: (context, state) {
+                    return BlocListener<RegisterBloc, RegisterState>(
+                      listener: (context, state) {
+                        if (state.success) {
+                          pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          customSnackbar(context,
+                              message: 'Registro completado!', type: 'ok');
+                        } else if (state.failure) {
+                          customSnackbar(context,
+                              message: 'Ups! algo salio mal', type: 'ok');
+                        }
+                      },
+                      child: CustomButton(
+                        size: size,
+                        color: state.loading
+                            ? ColorPalette.unFocused
+                            : ColorPalette.primary,
+                        onPressed: state.loading
+                            ? null
+                            : () {
+                                BlocProvider.of<RegisterBloc>(context)
+                                    .add(const ValidateForm());
+                              },
+                        child: state.loading
+                            ? const SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: ColorPalette.primary,
+                                ),
+                              )
+                            : const Text(
+                                'Ingresar',
+                                style: TextStyle(color: ColorPalette.textColor),
+                              ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(),
               ],

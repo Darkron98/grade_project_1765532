@@ -49,7 +49,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
           var resp = await UserService().userRegister(data);
 
-          emit(state.copyWith(loading: false));
+          emit(state.copyWith(
+            success: resp.startsWith('2'),
+            failure: !RegExp(r'^2').hasMatch(resp),
+          ));
+          emit(state.copyWith(loading: false, success: false, failure: false));
         }
       },
     );

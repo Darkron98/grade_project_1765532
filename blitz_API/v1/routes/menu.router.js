@@ -65,6 +65,8 @@ router.post('/create', controller.createDish);
  *                     items:
  *                       type: object
  *                       properties:
+ *                         dish_id:
+ *                           type: string
  *                         category_id:
  *                           type: string
  *                         description:

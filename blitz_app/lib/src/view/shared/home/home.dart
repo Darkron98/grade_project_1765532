@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/view/admin/prefs/app_preferences.dart';
 
 import 'package:remixicon/remixicon.dart';
@@ -157,22 +158,24 @@ class BottomNavBar extends StatelessWidget {
                     : ColorPalette.unFocused,
                 size: state.indexPage == 2 ? 35 : null,
               ),
-              NavIcon(
-                width: size.width,
-                onTap: () {
-                  BlocProvider.of<HomeBloc>(context).add(const ChangePage(3));
-                  _pageController.animateToPage(
-                    3,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                icon: Remix.user_settings_line,
-                color: state.indexPage == 3
-                    ? ColorPalette.primary
-                    : ColorPalette.unFocused,
-                size: state.indexPage == 3 ? 35 : null,
-              ),
+              if (Preferences().rol == 1) ...[
+                NavIcon(
+                  width: size.width,
+                  onTap: () {
+                    BlocProvider.of<HomeBloc>(context).add(const ChangePage(3));
+                    _pageController.animateToPage(
+                      3,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  icon: Remix.user_settings_line,
+                  color: state.indexPage == 3
+                      ? ColorPalette.primary
+                      : ColorPalette.unFocused,
+                  size: state.indexPage == 3 ? 35 : null,
+                ),
+              ],
             ],
           ),
         );

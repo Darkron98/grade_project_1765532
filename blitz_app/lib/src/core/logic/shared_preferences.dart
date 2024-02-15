@@ -22,4 +22,20 @@ class Preferences {
   String get token {
     return _preferences.getString('token') ?? '0';
   }
+
+  set user(String value) {
+    _preferences.setString('user', value);
+  }
+
+  String get user {
+    return _preferences.getString('user') ?? '';
+  }
+
+  set rol(int value) {
+    _preferences.setInt('rol', value);
+  }
+
+  int get rol {
+    return _preferences.getInt('rol') ?? 0;
+  }
 }

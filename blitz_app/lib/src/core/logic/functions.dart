@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:grade_project_1765532/src/core/model/menu.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<double> getLocationLat() async {
@@ -29,13 +30,14 @@ Future<double> getLocationLong() async {
 
 void getLocationPermission() async {
   var status = await Permission.location.request();
-  var filePermission = await Permission.mediaLibrary.request();
-  if (status.isGranted) {
-    print('permiso de ubicacion aceptado');
-  } else {
-    print('permiso de ubicacion denegado');
-  }
+  if (!status.isGranted) {}
 }
+
+bool validadeDishcreate(MenuReq dish) =>
+    dish.dishName.isEmpty ||
+    dish.price == 0 ||
+    dish.description.isEmpty ||
+    dish.categoryId.isEmpty;
 
 bool validateLogin(String user, String pass) => user.isEmpty || pass.isEmpty;
 

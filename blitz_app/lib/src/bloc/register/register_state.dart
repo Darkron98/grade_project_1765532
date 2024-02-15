@@ -10,6 +10,8 @@ class RegisterState extends Equatable {
     this.password = '',
     this.confirmationPass = '',
     this.loading = false,
+    this.failure = false,
+    this.success = false,
   });
 
   final String name;
@@ -19,6 +21,8 @@ class RegisterState extends Equatable {
   final String confirmationPass;
   final String lastName;
   final String userName;
+  final bool success;
+  final bool failure;
   final bool loading;
 
   RegisterState copyWith({
@@ -30,16 +34,21 @@ class RegisterState extends Equatable {
     String? lastName,
     String? userName,
     bool? loading,
+    bool? success,
+    bool? failure,
   }) =>
       RegisterState(
-          confirmationPass: confirmationPass ?? this.confirmationPass,
-          name: name ?? this.name,
-          email: email ?? this.email,
-          phone: phone ?? this.phone,
-          password: password ?? this.password,
-          lastName: lastName ?? this.lastName,
-          userName: userName ?? this.userName,
-          loading: loading ?? this.loading);
+        confirmationPass: confirmationPass ?? this.confirmationPass,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        password: password ?? this.password,
+        lastName: lastName ?? this.lastName,
+        userName: userName ?? this.userName,
+        loading: loading ?? this.loading,
+        success: success ?? this.success,
+        failure: failure ?? this.failure,
+      );
 
   @override
   List<Object> get props => [
@@ -50,6 +59,8 @@ class RegisterState extends Equatable {
         password,
         userName,
         lastName,
-        loading
+        loading,
+        failure,
+        success,
       ];
 }

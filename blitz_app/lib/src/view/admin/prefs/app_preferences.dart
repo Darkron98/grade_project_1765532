@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grade_project_1765532/src/view/admin/prefs/widget/create_dish.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../style/style.dart';
+import 'widget/menu/create_dish.dart';
+import 'widget/menu/update_dish.dart';
 
 class AppPreferences extends StatelessWidget {
   const AppPreferences({super.key});
@@ -71,61 +74,72 @@ class _AdminOptionsState extends State<AdminOptions> {
           decoration: BoxDecoration(
               color: ColorPalette.textColor,
               borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ListTile(
-                title: const Text(
-                  'Menú',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                leading: const Icon(
-                  Remix.restaurant_line,
-                  size: 30,
-                  color: ColorPalette.primary,
-                ),
-                trailing: Icon(
-                  selectIndex == 0
-                      ? Remix.arrow_drop_up_line
-                      : Remix.arrow_drop_down_line,
-                  size: 40,
-                ),
-                onTap: () => selectIndex != 0 ? setIndex(0) : setIndex(100),
-              ),
-              if (selectIndex == 0) ...[
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: const Icon(
-                        Remix.menu_add_fill,
-                        size: 30,
-                        color: ColorPalette.primary,
-                      ),
-                      onTap: () => createDishModal(context),
+          child: BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
+            builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ListTile(
+                    title: const Text(
+                      'Menú',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
-                    GestureDetector(
-                      child: const Icon(
-                        Remix.edit_box_line,
-                        size: 30,
-                        color: ColorPalette.primary,
-                      ),
-                      onTap: () {},
+                    leading: const Icon(
+                      Remix.restaurant_line,
+                      size: 30,
+                      color: ColorPalette.primary,
                     ),
-                    GestureDetector(
-                      child: const Icon(
-                        Remix.delete_bin_7_line,
-                        size: 30,
-                        color: ColorPalette.primary,
-                      ),
-                      onTap: () {},
+                    trailing: Icon(
+                      selectIndex == 0
+                          ? Remix.arrow_drop_up_line
+                          : Remix.arrow_drop_down_line,
+                      size: 40,
+                    ),
+                    onTap: () => selectIndex != 0 ? setIndex(0) : setIndex(100),
+                  ),
+                  if (selectIndex == 0) ...[
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          child: const Icon(
+                            Remix.menu_add_fill,
+                            size: 30,
+                            color: ColorPalette.primary,
+                          ),
+                          onTap: () => createDishModal(context),
+                        ),
+                        GestureDetector(
+                          child: const Icon(
+                            Remix.edit_box_line,
+                            size: 30,
+                            color: ColorPalette.primary,
+                          ),
+                          onTap: () {
+                            if (state.menuDishes.isEmpty) {
+                              BlocProvider.of<MenuPrefsBloc>(context)
+                                  .add(GetDishes());
+                            }
+                            updateDishModal(context);
+                          },
+                        ),
+                        GestureDetector(
+                          child: const Icon(
+                            Remix.delete_bin_7_line,
+                            size: 30,
+                            color: ColorPalette.primary,
+                          ),
+                          onTap: () {},
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
-              const SizedBox(),
-            ],
+                  const SizedBox(),
+                ],
+              );
+            },
           ),
         ),
         const SizedBox(height: 20),
@@ -161,7 +175,7 @@ class _AdminOptionsState extends State<AdminOptions> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: const [
                     Icon(
-                      Remix.menu_add_fill,
+                      Remix.user_add_line,
                       size: 30,
                       color: ColorPalette.primary,
                     ),
@@ -171,7 +185,7 @@ class _AdminOptionsState extends State<AdminOptions> {
                       color: ColorPalette.primary,
                     ),
                     Icon(
-                      Remix.delete_bin_7_line,
+                      Remix.user_unfollow_line,
                       size: 30,
                       color: ColorPalette.primary,
                     ),

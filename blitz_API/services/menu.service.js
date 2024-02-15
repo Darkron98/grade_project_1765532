@@ -41,6 +41,7 @@ const getService = async (req, res) => {
         }else{
             data.docs.forEach(doc => {
                     const dish = {
+                        dish_id: doc.id,
                         category_id: doc.data().category_id,
                         description: doc.data().description,
                         dish_name: doc.data().dish_name,

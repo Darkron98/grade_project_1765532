@@ -33,10 +33,10 @@ class Submitt extends MenuPrefsEvent {
 }
 
 class PickImage extends MenuPrefsEvent {
-  PickImage(this.imgaPath);
-  final String imgaPath;
+  PickImage(this.imgPath);
+  final String imgPath;
   @override
-  List<Object> get props => [imgaPath];
+  List<Object> get props => [imgPath];
 }
 
 class LoadCategories extends MenuPrefsEvent {
@@ -45,8 +45,22 @@ class LoadCategories extends MenuPrefsEvent {
 }
 
 class SelectCategory extends MenuPrefsEvent {
-  SelectCategory(this.index);
-  final int index;
+  SelectCategory(this.selectCategoryId, this.selectCategoryName);
+  final String selectCategoryId;
+  final String selectCategoryName;
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [selectCategoryId];
+}
+
+class GetDishes extends MenuPrefsEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class Update extends MenuPrefsEvent {
+  Update(this.dishId, this.context);
+  final String dishId;
+  final BuildContext context;
+  @override
+  List<Object> get props => [dishId];
 }

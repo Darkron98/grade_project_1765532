@@ -5,11 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
 import 'package:grade_project_1765532/src/core/service/pick_img.dart';
 import 'package:grade_project_1765532/src/style/color/palette.dart';
-import 'package:grade_project_1765532/src/view/admin/prefs/widget/custom_dropdown.dart';
-import 'package:grade_project_1765532/src/view/admin/prefs/widget/multi_line_text.dart';
+
 import 'package:grade_project_1765532/src/view/shared/login/widget/login_button.dart';
 import 'package:grade_project_1765532/src/view/shared/login/widget/login_form.dart';
+import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 import 'package:remixicon/remixicon.dart';
+
+import 'custom_dropdown.dart';
+import 'multi_line_text.dart';
 
 void createDishModal(BuildContext context) {
   Size size = MediaQuery.of(context).size;
@@ -31,7 +34,7 @@ void createDishModal(BuildContext context) {
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  //mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
@@ -47,7 +50,7 @@ void createDishModal(BuildContext context) {
                         const Text(
                           'Registrar platillo',
                           style: TextStyle(
-                            fontSize: 26,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: ColorPalette.textColor,
                           ),
@@ -61,6 +64,7 @@ void createDishModal(BuildContext context) {
                     SizedBox(
                       height: 600,
                       child: PageView(
+                        physics: const BouncingScrollPhysics(),
                         children: [
                           _Page1(size: size),
                           _Page2(size: size),
@@ -90,23 +94,17 @@ class _Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const SizedBox(),
         Column(
           children: [
-            const SizedBox(height: 5),
+            const RequiredField(),
+            const SizedBox(height: 15),
             LoginFormField(
                 size: MediaQuery.of(context).size,
                 onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
                     .add(DishName(value)),
                 label: 'Platillo'),
-            const SizedBox(height: 5),
-            LoginFormField(
-                size: MediaQuery.of(context).size,
-                onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
-                    .add(Price(double.parse(value))),
-                label: 'Precio unitario'),
             const SizedBox(height: 5),
             CustomMultiLineText(
                 size: size,
@@ -115,6 +113,23 @@ class _Page1 extends StatelessWidget {
                 label: 'Descripción',
                 maxLines: 4),
             const SizedBox(height: 5),
+            LoginFormField(
+                size: MediaQuery.of(context).size,
+                onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
+                    .add(Price(double.parse(value))),
+                label: 'Precio unitario'),
+            const SizedBox(height: 5),
+            BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
+              builder: (context, state) {
+                return CustomModal(
+                  size: size,
+                  label: state.selectCategoryName.isEmpty
+                      ? 'Categoria'
+                      : state.selectCategoryName,
+                  bloc: BlocProvider.of<MenuPrefsBloc>(context),
+                );
+              },
+            ),
           ],
         ),
         const Icon(
@@ -122,7 +137,31 @@ class _Page1 extends StatelessWidget {
           size: 100,
           color: ColorPalette.lightBg,
         ),
-        const SizedBox(),
+      ],
+    );
+  }
+}
+
+class RequiredField extends StatelessWidget {
+  const RequiredField({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: const [
+        Text(
+          'Campos obligatorios',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 14,
+            color: ColorPalette.unFocused,
+          ),
+        ),
+        SizedBox(),
+        SizedBox(),
       ],
     );
   }
@@ -147,36 +186,51 @@ class _Page2 extends StatelessWidget {
                 onImageSelected: (imgPath) =>
                     BlocProvider.of<MenuPrefsBloc>(context)
                         .add(PickImage(imgPath))),
-            const SizedBox(height: 30),
-            CustomModal(
-              size: size,
-              onChanged: null,
-              label: 'Categoria',
-              bloc: BlocProvider.of<MenuPrefsBloc>(context),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              'Selecciona una foto (opcional)',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 15,
+                color: ColorPalette.unFocused,
+              ),
             ),
           ],
         ),
         BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
           builder: (context, state) {
-            return CustomButton(
-                size: MediaQuery.of(context).size,
-                onPressed: state.loadingCreate
-                    ? null
-                    : () =>
-                        BlocProvider.of<MenuPrefsBloc>(context).add(Submitt()),
-                color: ColorPalette.primary,
-                child: state.loadingCreate
-                    ? const SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator(
-                          color: ColorPalette.primary,
-                        ),
-                      )
-                    : const Text('Guardar'));
+            return BlocListener<MenuPrefsBloc, MenuPrefsState>(
+              listener: (context, state) {
+                if (state.success) {
+                  Navigator.pop(context);
+                  customSnackbar(context,
+                      message: 'Platillo guardado!', type: 'ok');
+                } else if (state.success) {
+                  customSnackbar(context,
+                      message: 'Ups! algo salio mal', type: 'error');
+                }
+              },
+              child: CustomButton(
+                  size: MediaQuery.of(context).size,
+                  onPressed: state.loadingCreate
+                      ? null
+                      : () => BlocProvider.of<MenuPrefsBloc>(context)
+                          .add(Submitt()),
+                  color: ColorPalette.primary,
+                  child: state.loadingCreate
+                      ? const SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircularProgressIndicator(
+                            color: ColorPalette.primary,
+                          ),
+                        )
+                      : const Text('Guardar')),
+            );
           },
         ),
-        const SizedBox(),
       ],
     );
   }
@@ -278,7 +332,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ),
               ),
               onTap: () async {
-                final pickedImage = await getImage();
+                var pickedImage = await getImage();
                 if (pickedImage != null) {
                   setState(() {
                     imgPath = pickedImage;

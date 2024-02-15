@@ -70,7 +70,7 @@ class _CustomMultiLineTextState extends State<CustomMultiLineText> {
             bottom: 15,
           ),
           child: TextField(
-            maxLines: maxLines,
+            maxLines: _focusNode.hasFocus ? maxLines : 1,
             textAlign: TextAlign.left,
             focusNode: _focusNode,
             cursorColor: ColorPalette.textColor,
@@ -84,6 +84,18 @@ class _CustomMultiLineTextState extends State<CustomMultiLineText> {
             ),
             decoration: InputDecoration(
               labelText: label,
+              suffixIcon: _focusNode.hasFocus
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 0),
+                      child: GestureDetector(
+                        onTap: () => _focusNode.unfocus(),
+                        child: const Icon(
+                          Remix.check_fill,
+                          color: ColorPalette.textColor,
+                        ),
+                      ),
+                    )
+                  : null,
               labelStyle: TextStyle(
                 color: _focusNode.hasFocus
                     ? ColorPalette.textColor
@@ -95,8 +107,8 @@ class _CustomMultiLineTextState extends State<CustomMultiLineText> {
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: const BorderSide(color: ColorPalette.primary)),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: _focusNode.hasFocus ? 10 : 0, horizontal: 20),
             ),
           ),
         ),

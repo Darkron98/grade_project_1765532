@@ -35,6 +35,8 @@ class LoginServices extends LoginServicesInterface {
       );
 
       prefs.token = data.token;
+      prefs.user = data.user;
+      prefs.rol = data.rol;
 
       return data;
     } catch (e) {

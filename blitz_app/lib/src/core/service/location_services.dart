@@ -11,7 +11,6 @@ abstract class LocationServicesInterface {
 class LocationServices extends LocationServicesInterface {
   @override
   Future<Directions> getDirections(LatLng origin, LatLng destination) async {
-    // TODO: implement getDirections
     try {
       final response = await Dio().get(
           'https://maps.googleapis.com/maps/api/directions/json?',
