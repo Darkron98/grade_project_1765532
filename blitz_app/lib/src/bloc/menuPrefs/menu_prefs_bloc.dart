@@ -104,21 +104,48 @@ class MenuPrefsBloc extends Bloc<MenuPrefsEvent, MenuPrefsState> {
           failure: !RegExp(r'^2').hasMatch(response),
         ));
         if (state.success) {
-          customSnackbar(event.context,
-              message: 'Platillo Actualizado!', type: 'ok');
           emit(const MenuPrefsState());
           emit(state.copyWith(loadDishes: true));
           List<MenuResp> resp = await MenuService().getMenuDishes();
           emit(state.copyWith(menuDishes: resp));
           emit(state.copyWith(loadDishes: false));
-        } else if (state.failure) {
-          customSnackbar(event.context,
-              message: 'Ups! algo salio mal', type: 'error');
-        }
+        } else if (state.failure) {}
 
         emit(state.copyWith(
             loadingCreate: false, success: false, failure: false));
       },
     );
+    on<Delete>(
+      (event, emit) async {
+        emit(state.copyWith(loadingDelete: true));
+
+        var response = await MenuService().deleteDish(event.dishId);
+        emit(state.copyWith(
+          delSuccess: response.startsWith('2'),
+          delFailure: !RegExp(r'^2').hasMatch(response),
+        ));
+        if (state.delSuccess) {
+          emit(const MenuPrefsState());
+          emit(state.copyWith(loadDishes: true));
+          List<MenuResp> resp = await MenuService().getMenuDishes();
+          emit(state.copyWith(menuDishes: resp));
+          emit(state.copyWith(loadDishes: false));
+        }
+
+        emit(state.copyWith(
+            loadingDelete: false, delSuccess: false, delFailure: false));
+      },
+    );
+    on<RestoreFields>((event, emit) => emit(
+          state.copyWith(
+            dishName: '',
+            description: '',
+            labelImg: '',
+            imgPath: '',
+            selectCategoryId: '',
+            selectCategoryName: '',
+            price: 0,
+          ),
+        ));
   }
 }

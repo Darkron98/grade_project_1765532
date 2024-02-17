@@ -13,6 +13,7 @@ abstract class MenuServiceInterface {
   Future<String> uploadImg(String path);
   Future<List<MenuResp>> getMenuDishes();
   Future<String> updateDish(DishUpdate req);
+  Future<String> deleteDish(String id);
 }
 
 class MenuService extends MenuServiceInterface {
@@ -138,6 +139,20 @@ class MenuService extends MenuServiceInterface {
       Response response = await Dio().put(
         '${cons.host}/menu/update=${req.dishId}',
         data: body,
+        options: Options(headers: header(prefs.token)),
+      );
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return '400';
+    }
+  }
+
+  @override
+  Future<String> deleteDish(String id) async {
+    try {
+      Response response = await Dio().delete(
+        '${cons.host}/menu/delete=$id',
         options: Options(headers: header(prefs.token)),
       );
 

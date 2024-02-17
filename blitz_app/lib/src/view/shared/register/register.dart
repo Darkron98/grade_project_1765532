@@ -106,7 +106,7 @@ class Register extends StatelessWidget {
                                 ),
                               )
                             : const Text(
-                                'Ingresar',
+                                'Registrarse',
                                 style: TextStyle(color: ColorPalette.textColor),
                               ),
                       ),

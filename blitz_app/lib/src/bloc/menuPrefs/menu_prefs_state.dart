@@ -17,6 +17,9 @@ class MenuPrefsState extends Equatable {
     this.failure = false,
     this.success = false,
     this.loadDishes = false,
+    this.loadingDelete = false,
+    this.delFailure = false,
+    this.delSuccess = false,
   });
 
   final String dishName;
@@ -31,10 +34,13 @@ class MenuPrefsState extends Equatable {
   final bool stateFlag;
 
   final bool loadingCreate;
+  final bool loadingDelete;
   final bool loadingCategories;
   final bool loadDishes;
   final bool success;
   final bool failure;
+  final bool delSuccess;
+  final bool delFailure;
 
   final List<Category> categories;
   final List<MenuResp> menuDishes;
@@ -53,6 +59,9 @@ class MenuPrefsState extends Equatable {
     bool? failure,
     bool? success,
     bool? loadDishes,
+    bool? loadingDelete,
+    bool? delSuccess,
+    bool? delFailure,
     List<Category>? categories,
     List<MenuResp>? menuDishes,
   }) =>
@@ -72,6 +81,9 @@ class MenuPrefsState extends Equatable {
         success: success ?? this.success,
         menuDishes: menuDishes ?? this.menuDishes,
         loadDishes: loadDishes ?? this.loadDishes,
+        delFailure: delFailure ?? this.delFailure,
+        delSuccess: delSuccess ?? this.delSuccess,
+        loadingDelete: loadingDelete ?? this.loadingDelete,
       );
 
   @override
@@ -91,5 +103,8 @@ class MenuPrefsState extends Equatable {
         success,
         menuDishes,
         loadDishes,
+        delFailure,
+        delSuccess,
+        loadingDelete,
       ];
 }

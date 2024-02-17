@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
+import 'package:grade_project_1765532/src/view/admin/prefs/widget/personal/register_employee.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../style/style.dart';
@@ -125,14 +126,6 @@ class _AdminOptionsState extends State<AdminOptions> {
                             updateDishModal(context);
                           },
                         ),
-                        GestureDetector(
-                          child: const Icon(
-                            Remix.delete_bin_7_line,
-                            size: 30,
-                            color: ColorPalette.primary,
-                          ),
-                          onTap: () {},
-                        ),
                       ],
                     ),
                   ],
@@ -173,21 +166,21 @@ class _AdminOptionsState extends State<AdminOptions> {
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    Icon(
-                      Remix.user_add_line,
-                      size: 30,
-                      color: ColorPalette.primary,
+                  children: [
+                    GestureDetector(
+                      child: const Icon(
+                        Remix.user_add_line,
+                        size: 30,
+                        color: ColorPalette.primary,
+                      ),
+                      onTap: () => registerEmployeeModal(context),
                     ),
-                    Icon(
-                      Remix.edit_box_line,
-                      size: 30,
-                      color: ColorPalette.primary,
-                    ),
-                    Icon(
-                      Remix.user_unfollow_line,
-                      size: 30,
-                      color: ColorPalette.primary,
+                    GestureDetector(
+                      child: const Icon(
+                        Remix.edit_box_line,
+                        size: 30,
+                        color: ColorPalette.primary,
+                      ),
                     ),
                   ],
                 ),

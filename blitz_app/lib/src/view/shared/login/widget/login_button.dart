@@ -24,6 +24,7 @@ class CustomButton extends StatelessWidget {
           right: 40,
         ),
         child: SizedBox(
+          height: 45,
           width: double.infinity,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(

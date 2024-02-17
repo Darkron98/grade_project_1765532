@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, library_private_types_in_public_api
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,7 +14,6 @@ import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 import 'package:remixicon/remixicon.dart';
 
 import 'custom_dropdown.dart';
-import 'multi_line_text.dart';
 
 void createDishModal(BuildContext context) {
   Size size = MediaQuery.of(context).size;
@@ -106,12 +107,12 @@ class _Page1 extends StatelessWidget {
                     .add(DishName(value)),
                 label: 'Platillo'),
             const SizedBox(height: 5),
-            CustomMultiLineText(
-                size: size,
-                onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
-                    .add(Description(value)),
-                label: 'Descripción',
-                maxLines: 4),
+            LoginFormField(
+              size: size,
+              onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
+                  .add(Description(value)),
+              label: 'Descripción',
+            ),
             const SizedBox(height: 5),
             LoginFormField(
                 size: MediaQuery.of(context).size,

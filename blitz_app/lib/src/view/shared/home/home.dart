@@ -40,8 +40,16 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () =>
-                            Navigator.of(context).pushReplacementNamed('login'),
+                        onTap: () {
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(const ChangePage(0));
+                          pageController.animateToPage(
+                            0,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          Navigator.of(context).pushReplacementNamed('login');
+                        },
                         child: Container(
                           width: 45,
                           height: 45,

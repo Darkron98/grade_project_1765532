@@ -64,3 +64,15 @@ class Update extends MenuPrefsEvent {
   @override
   List<Object> get props => [dishId];
 }
+
+class Delete extends MenuPrefsEvent {
+  Delete(this.dishId);
+  final String dishId;
+  @override
+  List<Object> get props => [dishId];
+}
+
+class RestoreFields extends MenuPrefsEvent {
+  @override
+  List<Object> get props => [];
+}
