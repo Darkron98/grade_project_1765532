@@ -3,14 +3,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../../../bloc/menuPrefs/menu_prefs_bloc.dart';
-import '../../../../../core/service/pick_img.dart';
-import '../../../../../style/style.dart';
-import '../../../../shared/login/widget/widgets.dart';
-import '../../../../widgets/snackbar.dart';
+import '../../../bloc/menuPrefs/menu_prefs_bloc.dart';
+import '../../../core/service/pick_img.dart';
+import '../../../style/style.dart';
+import '../../shared/login/widget/widgets.dart';
+import '../../widgets/snackbar.dart';
 import 'custom_dropdown.dart';
 
 void updateDishModal(BuildContext context) {
@@ -32,60 +33,63 @@ void updateDishModal(BuildContext context) {
                   borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Column(
-                  //mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 5,
-                          decoration: BoxDecoration(
-                              color: ColorPalette.lightBg,
-                              borderRadius: BorderRadius.circular(2.5)),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Actualizar platillo',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: ColorPalette.textColor,
+                child: IntrinsicHeight(
+                  child: Column(
+                    //mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: ColorPalette.lightBg,
+                                borderRadius: BorderRadius.circular(2.5)),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                    BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
-                      builder: (context, state) {
-                        return Container(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          width: double.infinity,
-                          height: size.height * 0.85,
-                          child: state.loadDishes
-                              ? Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    SizedBox(),
-                                    SizedBox(
-                                        width: 60,
-                                        height: 60,
-                                        child: CircularProgressIndicator(
-                                            color: ColorPalette.primary,
-                                            strokeWidth: 6)),
-                                    SizedBox()
-                                  ],
-                                )
-                              : Scaffold(
-                                  backgroundColor: Colors.transparent,
-                                  body: MenuDishList(size: size, state: state),
-                                ),
-                        );
-                      },
-                    ),
-                  ],
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Actualizar platillo',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: ColorPalette.textColor,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                      BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
+                        builder: (context, state) {
+                          return Container(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            width: double.infinity,
+                            height: size.height * 0.85,
+                            child: state.loadDishes
+                                ? Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: const [
+                                      SizedBox(),
+                                      SizedBox(
+                                          width: 60,
+                                          height: 60,
+                                          child: CircularProgressIndicator(
+                                              color: ColorPalette.primary,
+                                              strokeWidth: 6)),
+                                      SizedBox()
+                                    ],
+                                  )
+                                : Scaffold(
+                                    backgroundColor: Colors.transparent,
+                                    body:
+                                        MenuDishList(size: size, state: state),
+                                  ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -318,14 +322,14 @@ class _MenuDishListState extends State<MenuDishList> {
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              LoginFormField(
+                              CustomFormField(
                                   size: MediaQuery.of(context).size,
                                   onChanged: (value) =>
                                       BlocProvider.of<MenuPrefsBloc>(context)
                                           .add(DishName(value)),
                                   label: 'Platillo'),
                               const SizedBox(height: 5),
-                              LoginFormField(
+                              CustomFormField(
                                 size: size,
                                 onChanged: (value) =>
                                     BlocProvider.of<MenuPrefsBloc>(context)
@@ -333,12 +337,18 @@ class _MenuDishListState extends State<MenuDishList> {
                                 label: 'Descripción',
                               ),
                               const SizedBox(height: 5),
-                              LoginFormField(
-                                  size: MediaQuery.of(context).size,
-                                  onChanged: (value) =>
-                                      BlocProvider.of<MenuPrefsBloc>(context)
-                                          .add(Price(double.parse(value))),
-                                  label: 'Precio unitario'),
+                              CustomFormField(
+                                size: MediaQuery.of(context).size,
+                                onChanged: (value) =>
+                                    BlocProvider.of<MenuPrefsBloc>(context).add(
+                                        Price(value.isEmpty
+                                            ? 0
+                                            : double.parse(value))),
+                                label: 'Precio unitario',
+                                formatter: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                              ),
                               const SizedBox(height: 5),
                               BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
                                 builder: (context, state) {

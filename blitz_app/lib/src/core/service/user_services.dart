@@ -8,6 +8,7 @@ import '../logic/shared_preferences.dart';
 abstract class UserServiceInterface {
   Future<String> userRegister(RegisterInfo userInfo);
   Future<String> employeeCreate(RegisterEmployee employeeInfo);
+  Future<List<RegisterEmployee>> getEmployee(String dni);
 }
 
 class UserService extends UserServiceInterface {
@@ -62,6 +63,39 @@ class UserService extends UserServiceInterface {
       return response.statusCode.toString();
     } catch (e) {
       return '400';
+    }
+  }
+
+  @override
+  Future<List<RegisterEmployee>> getEmployee(String dni) async {
+    try {
+      Response response = await Dio().get(
+        '${cons.host}/employee/$dni',
+        options: Options(headers: header(prefs.token)),
+      );
+
+      var data = response.data;
+
+      List<RegisterEmployee> resp = [];
+
+      resp.add(
+        RegisterEmployee(
+          lastName: data['data']['user_data']['last_name'],
+          userName: data['data']['user_name'],
+          name:
+              '${data['data']['user_data']['first_name']} ${data['data']['user_data']['second_name']}',
+          email: data['data']['user_data']['mail'],
+          phone: data['data']['user_data']['phone'],
+          password: '',
+          dni: dni,
+          salary:
+              double.parse(data['data']['employee_data']['salary'].toString()),
+        ),
+      );
+
+      return resp;
+    } catch (e) {
+      return [];
     }
   }
 }

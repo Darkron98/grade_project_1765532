@@ -75,3 +75,15 @@ class InfoSubmmitt extends RegEmployeeEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetEmployee extends RegEmployeeEvent {
+  const GetEmployee();
+  @override
+  List<Object> get props => [];
+}
+
+class SetNewState extends RegEmployeeEvent {
+  const SetNewState();
+  @override
+  List<Object> get props => [];
+}

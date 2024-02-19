@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
-import 'package:grade_project_1765532/src/view/admin/prefs/widget/personal/register_employee.dart';
+import 'package:grade_project_1765532/src/bloc/reg_employee/reg_employee_bloc.dart';
+import 'package:grade_project_1765532/src/view/admin/personal/register_employee.dart';
+import 'package:grade_project_1765532/src/view/admin/personal/update_employee.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../style/style.dart';
-import 'widget/menu/create_dish.dart';
-import 'widget/menu/update_dish.dart';
+import '../../style/style.dart';
+import 'menu/create_dish.dart';
+import 'menu/update_dish.dart';
 
 class AppPreferences extends StatelessWidget {
   const AppPreferences({super.key});
@@ -173,7 +175,11 @@ class _AdminOptionsState extends State<AdminOptions> {
                         size: 30,
                         color: ColorPalette.primary,
                       ),
-                      onTap: () => registerEmployeeModal(context),
+                      onTap: () {
+                        BlocProvider.of<RegEmployeeBloc>(context)
+                            .add(const SetNewState());
+                        registerEmployeeModal(context);
+                      },
                     ),
                     GestureDetector(
                       child: const Icon(
@@ -181,6 +187,11 @@ class _AdminOptionsState extends State<AdminOptions> {
                         size: 30,
                         color: ColorPalette.primary,
                       ),
+                      onTap: () {
+                        BlocProvider.of<RegEmployeeBloc>(context)
+                            .add(const SetNewState());
+                        updateEmployeeModal(context);
+                      },
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/style/style.dart';
 import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
@@ -6,7 +7,6 @@ import 'package:remixicon/remixicon.dart';
 
 import '../../../bloc/bloc.dart';
 import '../login/widget/widgets.dart';
-import 'widgets/widgets.dart';
 
 class Register extends StatelessWidget {
   const Register({super.key, required this.size, required this.pageController});
@@ -26,44 +26,45 @@ class Register extends StatelessWidget {
               children: [
                 BackButton(size: size, pageController: pageController),
                 Tittle(size: size),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypeName(value)),
                   label: 'Nombre',
                 ),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypeLastName(value)),
                   label: 'Apellido',
                 ),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypeEmail(value)),
                   label: 'E-mail',
                 ),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypePhone(value)),
                   label: 'Telefono',
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
                 ),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypeUserName(value)),
                   label: 'Nombre de usuario',
                 ),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   pass: true,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
                       .add(TypePassword(value)),
                   label: 'Contraseña',
                 ),
-                RegisterFormField(
+                CustomFormField(
                   size: size,
                   pass: true,
                   onChanged: (value) => BlocProvider.of<RegisterBloc>(context)

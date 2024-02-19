@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../../../style/style.dart';
+import '../../../style/style.dart';
 
 class CustomModal extends StatefulWidget {
   const CustomModal({

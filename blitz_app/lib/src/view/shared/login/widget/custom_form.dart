@@ -1,51 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grade_project_1765532/src/bloc/auth/auth_bloc.dart';
+import 'package:grade_project_1765532/src/style/color/palette.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../../bloc/bloc.dart';
-import '../../../../style/style.dart';
-
-class RegisterFormField extends StatefulWidget {
-  const RegisterFormField({
+class CustomFormField extends StatefulWidget {
+  const CustomFormField({
     super.key,
     required this.size,
     this.pass,
     this.label,
     required this.onChanged,
+    this.formatter,
   });
+
   final bool? pass;
+
   final Size size;
+
   final String? label;
+
   final Function(String)? onChanged;
+
+  final List<TextInputFormatter>? formatter;
 
   @override
-  _RegisterFormFieldState createState() => _RegisterFormFieldState(
-        size: size,
-        pass: pass,
-        label: label,
-        obscure: pass ?? false,
-        onChanged: onChanged,
-      );
+  CustomFormFieldState createState() => CustomFormFieldState();
 }
 
-class _RegisterFormFieldState extends State<RegisterFormField> {
-  _RegisterFormFieldState({
-    required this.onChanged,
-    required this.size,
-    this.pass,
-    this.label,
-    required this.obscure,
-  });
+class CustomFormFieldState extends State<CustomFormField> {
+  CustomFormFieldState();
+
   final FocusNode _focusNode = FocusNode();
-  final bool? pass;
-  final Size size;
-  final String? label;
-  bool obscure = false;
-  final Function(String)? onChanged;
+
+  late bool? pass;
+
+  late Size size;
+
+  late String? label;
+
+  late bool obscure = false;
+
+  late Function(String)? onChanged;
+
+  late List<TextInputFormatter>? formatter;
 
   @override
   void initState() {
     super.initState();
+
+    pass = super.widget.pass;
+
+    size = super.widget.size;
+
+    label = super.widget.label;
+
+    obscure = super.widget.pass ?? false;
+
+    onChanged = super.widget.onChanged;
+
+    formatter = super.widget.formatter;
 
     _focusNode.addListener(() {
       setState(() {});
@@ -53,7 +68,7 @@ class _RegisterFormFieldState extends State<RegisterFormField> {
   }
 
   void obscurePass() {
-    this.obscure = !this.obscure;
+    obscure = !obscure;
     setState(() {});
   }
 
@@ -71,11 +86,16 @@ class _RegisterFormFieldState extends State<RegisterFormField> {
             selectionColor: Color.fromARGB(255, 141, 56, 56),
             selectionHandleColor: ColorPalette.primary),
       ),
-      child: BlocBuilder<RegisterBloc, RegisterState>(
+      child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) => Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40, bottom: 15),
+          padding: const EdgeInsets.only(
+            left: 40,
+            right: 40,
+            bottom: 15,
+          ),
           child: TextField(
             textAlign: TextAlign.left,
+            inputFormatters: formatter,
             focusNode: _focusNode,
             obscureText: obscure,
             cursorColor: ColorPalette.textColor,

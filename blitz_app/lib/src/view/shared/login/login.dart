@@ -37,14 +37,14 @@ class Login extends StatelessWidget {
                       ),
                       Column(
                         children: [
-                          LoginFormField(
+                          CustomFormField(
                             size: size,
                             label: 'Usuario',
                             onChanged: (value) =>
                                 BlocProvider.of<AuthBloc>(context)
                                     .add(TypeUser(value)),
                           ),
-                          LoginFormField(
+                          CustomFormField(
                             size: size,
                             pass: true,
                             label: 'Contraseña',

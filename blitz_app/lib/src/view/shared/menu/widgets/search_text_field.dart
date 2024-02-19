@@ -11,36 +11,44 @@ class SearchTextField extends StatefulWidget {
     required this.size,
     this.label,
     required this.onChanged,
+    this.onPressed,
   });
 
   final Size size;
+
   final String? label;
+
   final Function(String)? onChanged;
+
+  final void Function()? onPressed;
 
   @override
-  _SearchTextFieldState createState() => _SearchTextFieldState(
-        size: size,
-        label: label,
-        onChanged: onChanged,
-      );
+  SearchTextFieldState createState() => SearchTextFieldState();
 }
 
-class _SearchTextFieldState extends State<SearchTextField> {
-  _SearchTextFieldState({
-    required this.onChanged,
-    required this.size,
-    this.label,
-  });
+class SearchTextFieldState extends State<SearchTextField> {
+  SearchTextFieldState();
+
   final FocusNode _focusNode = FocusNode();
 
-  final Size size;
-  final String? label;
+  late Size size;
+  late String? label;
 
-  final Function(String)? onChanged;
+  late Function(String)? onChanged;
+
+  late void Function()? onPressed;
 
   @override
   void initState() {
     super.initState();
+
+    size = super.widget.size;
+
+    label = super.widget.label;
+
+    onChanged = super.widget.onChanged;
+
+    onPressed = super.widget.onPressed;
 
     _focusNode.addListener(() {
       setState(() {});
@@ -77,12 +85,25 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   : ColorPalette.unFocused,
             ),
             decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  splashColor: Colors.transparent,
-                  onPressed: () {},
-                  icon: const Icon(
-                    Remix.search_line,
-                    color: ColorPalette.unFocused,
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: GestureDetector(
+                    onTap: _focusNode.hasFocus ? null : onPressed,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: _focusNode.hasFocus
+                              ? ColorPalette.lightBg
+                              : ColorPalette.primary,
+                          borderRadius: BorderRadius.circular(40)),
+                      child: Icon(
+                        Remix.search_line,
+                        color: _focusNode.hasFocus
+                            ? ColorPalette.unFocused
+                            : ColorPalette.textColor,
+                      ),
+                    ),
                   ),
                 ),
                 labelText: label,

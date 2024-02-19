@@ -3,13 +3,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/menuPrefs/menu_prefs_bloc.dart';
 import 'package:grade_project_1765532/src/core/service/pick_img.dart';
 import 'package:grade_project_1765532/src/style/color/palette.dart';
 
-import 'package:grade_project_1765532/src/view/shared/login/widget/login_button.dart';
-import 'package:grade_project_1765532/src/view/shared/login/widget/login_form.dart';
+import 'package:grade_project_1765532/src/view/shared/login/widget/custom_button.dart';
+import 'package:grade_project_1765532/src/view/shared/login/widget/custom_form.dart';
 import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -34,46 +35,48 @@ void createDishModal(BuildContext context) {
                   borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Column(
-                  //mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 5,
-                          decoration: BoxDecoration(
-                              color: ColorPalette.lightBg,
-                              borderRadius: BorderRadius.circular(2.5)),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Registrar platillo',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: ColorPalette.textColor,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Divider(
-                          color: ColorPalette.darkBg,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 600,
-                      child: PageView(
-                        physics: const BouncingScrollPhysics(),
+                child: IntrinsicHeight(
+                  child: Column(
+                    //mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
                         children: [
-                          _Page1(size: size),
-                          _Page2(size: size),
+                          Container(
+                            width: 50,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: ColorPalette.lightBg,
+                                borderRadius: BorderRadius.circular(2.5)),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Registrar platillo',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: ColorPalette.textColor,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Divider(
+                            color: ColorPalette.darkBg,
+                          ),
                         ],
                       ),
-                    ),
-                    const SizedBox(),
-                  ],
+                      SizedBox(
+                        height: 600,
+                        child: PageView(
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            _Page1(size: size),
+                            _Page2(size: size),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -101,24 +104,26 @@ class _Page1 extends StatelessWidget {
           children: [
             const RequiredField(),
             const SizedBox(height: 15),
-            LoginFormField(
+            CustomFormField(
                 size: MediaQuery.of(context).size,
                 onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
                     .add(DishName(value)),
                 label: 'Platillo'),
             const SizedBox(height: 5),
-            LoginFormField(
+            CustomFormField(
               size: size,
               onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
                   .add(Description(value)),
               label: 'Descripción',
             ),
             const SizedBox(height: 5),
-            LoginFormField(
-                size: MediaQuery.of(context).size,
-                onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
-                    .add(Price(double.parse(value))),
-                label: 'Precio unitario'),
+            CustomFormField(
+              size: MediaQuery.of(context).size,
+              onChanged: (value) => BlocProvider.of<MenuPrefsBloc>(context)
+                  .add(Price(value.isEmpty ? 0 : double.parse(value))),
+              label: 'Precio unitario',
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
             const SizedBox(height: 5),
             BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
               builder: (context, state) {

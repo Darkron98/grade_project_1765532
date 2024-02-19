@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
-import 'package:grade_project_1765532/src/view/admin/prefs/app_preferences.dart';
+import 'package:grade_project_1765532/src/view/admin/app_preferences.dart';
 
 import 'package:remixicon/remixicon.dart';
 

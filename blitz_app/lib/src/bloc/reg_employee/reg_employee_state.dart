@@ -11,8 +11,10 @@ class RegEmployeeState extends Equatable {
     this.pass = '',
     this.confirmPass = '',
     this.salary = 0,
+    this.employee = const [],
     this.loadingCreate = false,
     this.loadingDelete = false,
+    this.loadingUpdate = false,
     this.success = false,
     this.failure = false,
     this.delSuccess = false,
@@ -30,8 +32,11 @@ class RegEmployeeState extends Equatable {
 
   final double salary;
 
+  final List<RegisterEmployee> employee;
+
   final bool loadingCreate;
   final bool loadingDelete;
+  final bool loadingUpdate;
   final bool success;
   final bool failure;
   final bool delSuccess;
@@ -47,8 +52,10 @@ class RegEmployeeState extends Equatable {
     String? pass,
     String? confirmPass,
     double? salary,
+    List<RegisterEmployee>? employee,
     bool? loadingCreate,
     bool? loadingDelete,
+    bool? loadingUpdate,
     bool? success,
     bool? failure,
     bool? delSuccess,
@@ -64,8 +71,10 @@ class RegEmployeeState extends Equatable {
         pass: pass ?? this.pass,
         confirmPass: confirmPass ?? this.confirmPass,
         salary: salary ?? this.salary,
+        employee: employee ?? this.employee,
         loadingCreate: loadingCreate ?? this.loadingCreate,
         loadingDelete: loadingDelete ?? this.loadingDelete,
+        loadingUpdate: loadingUpdate ?? this.loadingUpdate,
         success: success ?? this.success,
         failure: failure ?? this.failure,
         delSuccess: delSuccess ?? this.delSuccess,
@@ -83,8 +92,10 @@ class RegEmployeeState extends Equatable {
         pass,
         confirmPass,
         salary,
+        employee,
         loadingCreate,
         loadingDelete,
+        loadingUpdate,
         success,
         failure,
         delSuccess,

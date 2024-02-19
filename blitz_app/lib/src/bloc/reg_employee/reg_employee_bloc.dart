@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:grade_project_1765532/src/core/model/register_user.dart';
+import 'package:grade_project_1765532/src/view/shared/register/register.dart';
 
 import '../../core/service/user_services.dart';
 
@@ -67,5 +68,14 @@ class RegEmployeeBloc extends Bloc<RegEmployeeEvent, RegEmployeeState> {
       }
       emit(const RegEmployeeState());
     });
+    on<GetEmployee>((event, emit) async {
+      if (state.dni.isNotEmpty) {
+        emit(state.copyWith(loadingCreate: true));
+        emit(state.copyWith(
+            employee: await UserService().getEmployee(state.dni)));
+      }
+      emit(state.copyWith(loadingCreate: false));
+    });
+    on<SetNewState>((event, emit) => emit(const RegEmployeeState()));
   }
 }
