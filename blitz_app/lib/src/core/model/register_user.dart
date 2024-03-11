@@ -76,3 +76,39 @@ class RegisterEmployee {
         salary: salary ?? this.salary,
       );
 }
+
+class EmployeeUpdate {
+  const EmployeeUpdate({
+    this.lastName,
+    this.name,
+    this.email,
+    this.phone,
+    this.dni,
+    this.salary,
+  });
+
+  final String? name;
+  final String? lastName;
+  final String? email;
+  final String? phone;
+  final String? dni;
+
+  final double? salary;
+
+  EmployeeUpdate copyWith({
+    String? name,
+    String? email,
+    String? phone,
+    String? lastName,
+    String? dni,
+    double? salary,
+  }) =>
+      EmployeeUpdate(
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        lastName: lastName ?? this.lastName,
+        dni: dni ?? this.dni,
+        salary: salary ?? this.salary,
+      );
+}

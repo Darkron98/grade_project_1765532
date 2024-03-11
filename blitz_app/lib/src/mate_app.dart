@@ -21,18 +21,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => RegisterBloc(),
         ),
-        BlocProvider(
-          create: (context) => HomeBloc(),
-        ),
-        BlocProvider(
-          create: (context) => MapBloc(),
-        ),
-        BlocProvider(
-          create: (context) => MenuPrefsBloc(),
-        ),
-        BlocProvider(
-          create: (context) => RegEmployeeBloc(),
-        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

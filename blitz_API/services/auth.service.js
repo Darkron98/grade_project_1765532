@@ -15,6 +15,19 @@ const authService = async (data, res) =>{
             return res.status(404).json({
                 msg: 'user [' + data.user_name + '] does not exists' 
             });
+        } else if(userSnapshot[0].data().rol == 2){
+            const EmployeeDoc = await firestore.collection('employee').where('user_id', '==', userSnapshot[0].id).get();
+            const EmployeeSnapshot = [];
+        
+            EmployeeDoc.docs.forEach(doc => {
+                EmployeeSnapshot.push(doc);
+            });
+
+            if(EmployeeSnapshot[0].data().active == 0){
+                return res.status(400).json({
+                    msg: 'user [' + data.user_name + '] has been fired.' 
+                });
+            }
         }
         
         let {password} = userSnapshot[0].data();

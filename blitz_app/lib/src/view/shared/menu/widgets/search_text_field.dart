@@ -69,7 +69,7 @@ class SearchTextFieldState extends State<SearchTextField> {
             selectionColor: Color.fromARGB(255, 141, 56, 56),
             selectionHandleColor: ColorPalette.primary),
       ),
-      child: BlocBuilder<AuthBloc, AuthState>(
+      child: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) => Padding(
           padding: const EdgeInsets.only(left: 40, right: 40),
           child: TextField(

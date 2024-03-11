@@ -93,9 +93,30 @@ const deleteDish = async (req, res)=>{
     }
 }
 
+const getMenuWithCategory = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else {
+            await services.getMenuWithCategories(req, res);
+        }
+    }catch(e){
+        res.status(401).json({
+            msg: 'unauthorized',
+            error: e
+        });
+    }
+}
+
 module.exports = {
     createDish,
     getDish,
     updateDish,
     deleteDish,
+    getMenuWithCategory,
 }

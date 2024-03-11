@@ -52,7 +52,6 @@ class Login extends StatelessWidget {
                                 BlocProvider.of<AuthBloc>(context)
                                     .add(TypePass(value)),
                           ),
-                          const RemainUser(),
                           BlocListener<AuthBloc, AuthState>(
                             listener: (context, state) {
                               if (state.success) {

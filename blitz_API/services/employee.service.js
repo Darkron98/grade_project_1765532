@@ -144,7 +144,12 @@ const getByIdDocService = async (req, res) => {
             res.status(404).json({
                 msg: 'no data'
             });
-        } else {
+        } else if(employeeSnapshot[0].data().active == 0){
+            res.status(400).json({
+                msg: 'employee has been fired.'
+            });
+        } 
+        else {
             const userId = employeeSnapshot[0].data().user_id;
             const userDocs = await firestore.collection('user').doc(userId);
             const userSnapshot = await userDocs.get();

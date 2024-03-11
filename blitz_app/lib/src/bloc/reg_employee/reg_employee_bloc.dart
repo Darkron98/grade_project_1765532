@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:grade_project_1765532/src/core/model/register_user.dart';
-import 'package:grade_project_1765532/src/view/shared/register/register.dart';
 
 import '../../core/service/user_services.dart';
 
@@ -70,12 +69,44 @@ class RegEmployeeBloc extends Bloc<RegEmployeeEvent, RegEmployeeState> {
     });
     on<GetEmployee>((event, emit) async {
       if (state.dni.isNotEmpty) {
-        emit(state.copyWith(loadingCreate: true));
+        emit(state.copyWith(
+          loadingCreate: true,
+        ));
         emit(state.copyWith(
             employee: await UserService().getEmployee(state.dni)));
       }
       emit(state.copyWith(loadingCreate: false));
     });
     on<SetNewState>((event, emit) => emit(const RegEmployeeState()));
+    on<UpdateEmployee>((event, emit) async {
+      emit(state.copyWith(loadingUpdate: true));
+
+      EmployeeUpdate req = EmployeeUpdate(
+        name: state.name.isEmpty ? null : state.name,
+        lastName: state.lastNames.isEmpty ? null : state.lastNames,
+        dni: state.dni.isEmpty ? null : state.dni,
+        phone: state.phone.isEmpty ? null : state.phone,
+        salary: state.salary <= 0 ? null : state.salary,
+        email: state.eMail.isEmpty ? null : state.eMail,
+      );
+      var resp = await UserService().updateEmployee(req, state.employee[0].dni);
+
+      emit(state.copyWith(
+        success: resp.startsWith('2'),
+        failure: !RegExp(r'^2').hasMatch(resp),
+      ));
+
+      emit(const RegEmployeeState());
+    });
+    on<FireEmployee>((event, emit) async {
+      emit(state.copyWith(loadingDelete: true));
+      var resp = await UserService().fireEmployee(state.employee[0].dni);
+      emit(state.copyWith(
+        delSuccess: resp.startsWith('2'),
+        delFailure: !RegExp(r'^2').hasMatch(resp),
+      ));
+
+      emit(const RegEmployeeState());
+    });
   }
 }

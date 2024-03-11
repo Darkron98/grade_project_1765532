@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +11,39 @@ import '../../../bloc/bloc.dart';
 import '../../../style/style.dart';
 import '../../view.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late bool newOrder;
+
+  void newOrderFlag(bool flag) {
+    newOrder = flag;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    newOrder = false;
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      setState(() {
+        newOrder = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    if (newOrder && !BlocProvider.of<OrderBloc>(context).state.loadingOrders) {
+      BlocProvider.of<OrderBloc>(context).add(GetOrderList());
+      newOrderFlag(false);
+    }
     PageController pageController = PageController();
     return Scaffold(
       extendBody: true,

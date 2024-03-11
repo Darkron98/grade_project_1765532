@@ -153,6 +153,52 @@ router.put('/update=:id', controller.updateDish);
 */
 router.delete('/delete=:id', controller.deleteDish);
 
+/** Get all
+ * @openapi 
+ * '/menu/getMenuWithcategory':
+ *     get:
+ *       tags: 
+ *         - Menu
+ *       description: get all menu items
+ *       security:
+ *         - bearerToken: []
+ *       responses:
+ *         '200': 
+ *           description: Successful operation
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   msg:
+ *                     type: string
+ *                   data:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         category_id:
+ *                           type: string
+ *                         category_name:
+ *                           type: string
+ *                         dishes:
+ *                           type: array
+ *                           items:
+ *                              type: object
+ *                              properties:
+ *                                dish_id:
+ *                                  type: string
+ *                                description:
+ *                                  type: string
+ *                                dish_name:
+ *                                  type: string
+ *                                label_img:
+ *                                  type: string
+ *                                price:
+ *                                  type: number
+*/
+router.get('/getMenuWithcategory', controller.getMenuWithCategory);
+
 module.exports = {
     routes: router,
 }

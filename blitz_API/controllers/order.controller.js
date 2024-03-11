@@ -21,6 +21,26 @@ const createOrder = async (req, res) => {
     }
 }
 
+const GetOrdersByUser = async (req, res) => {
+    try{
+        const {authorization} = req.headers;
+        const auth = verifyToken(authorization);
+
+        if(!auth.status){
+            return res.status(auth.statusCode).json({
+                msg: auth.msg
+            });
+        } else {
+            await services.getByUserService(req, res, auth.decoded.user_name);
+        }
+    }catch(e){
+        res.status(401).json({
+            msg: 'unauthorized',
+            error: e
+        });
+    }
+}
+
 const takeOrder = async (req, res) => {
     try{
         const {authorization} = req.headers;
@@ -202,5 +222,6 @@ module.exports = {
     updateOrderItem,
     deleteOrderItem,
     addOrderItem,
-    getItemsByOrder
+    getItemsByOrder,
+    GetOrdersByUser,
 }

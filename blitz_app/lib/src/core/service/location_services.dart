@@ -6,6 +6,7 @@ import '../model/location/directions_model.dart';
 
 abstract class LocationServicesInterface {
   Future<Directions> getDirections(LatLng origin, LatLng destination);
+  Future<String> getPhysicalDirection(double lat, double lng);
 }
 
 class LocationServices extends LocationServicesInterface {
@@ -49,5 +50,20 @@ class LocationServices extends LocationServicesInterface {
     } catch (e) {
       return const Directions();
     }
+  }
+
+  @override
+  Future<String> getPhysicalDirection(double lat, double lng) async {
+    final response = await Dio().get(
+      'https://maps.googleapis.com/maps/api/geocode/json',
+      queryParameters: {
+        'latlng': '$lat,$lng',
+        'key':
+            'AIzaSyD9KHPOIW5Mka2Kt6eTmZzzW6jj7RgxDZQ', // Reemplaza con tu clave de API
+      },
+    );
+    final data = response.data['results'][0];
+    final address = data['formatted_address'];
+    return address ?? '';
   }
 }

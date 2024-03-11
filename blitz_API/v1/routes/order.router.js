@@ -8,7 +8,8 @@ const {
     updateOrderItem, 
     deleteOrderItem, 
     addOrderItem, 
-    getItemsByOrder
+    getItemsByOrder,
+    GetOrdersByUser
 } = require('../../controllers/order.controller');
 const router = express.Router();
 
@@ -33,6 +34,8 @@ const router = express.Router();
  *                       type: number
  *                     total_price:
  *                       type: number
+ *                     observations:
+ *                       type: string
  *                     delivery_id:
  *                       type: string
  *                     'items':
@@ -43,9 +46,7 @@ const router = express.Router();
  *                            item_desc:
  *                              type: string
  *                            item_id:
- *                              type: string
- *                            observations:
- *                              type: string
+ *                              type: string                         
  *                            quantity:
  *                              type: number
  *                            unit_price:
@@ -78,6 +79,8 @@ const router = express.Router();
  *                       type: string
  *                     date:
  *                       type: string
+ *                     observations:
+ *                       type: string
  *                     state:
  *                       type: boolean
  *                     taken:
@@ -94,9 +97,7 @@ const router = express.Router();
  *                            item_desc:
  *                              type: string
  *                            item_id:
- *                              type: string
- *                            observations:
- *                              type: string
+ *                              type: string                          
  *                            quantity:
  *                              type: number
  *                            unit_price:
@@ -271,6 +272,8 @@ router.delete('/deleteitem=:orderId;:itemId', deleteOrderItem);
  *                         type: string
  *                       owner_id:
  *                         type: string
+ *                       observations:
+ *                         type: string
  *                       state:
  *                         type: boolean
  *                       date:
@@ -366,9 +369,7 @@ router.post('/item.add=:id', addOrderItem);
  *                       item_desc:
  *                         type: string
  *                       item_id:
- *                         type: string
- *                       observations:
- *                         type: string
+ *                         type: string                   
  *                       quantity:
  *                         type: number
  *                       unit_price:
@@ -376,6 +377,53 @@ router.post('/item.add=:id', addOrderItem);
 */
 router.get('/getItems=:id', getItemsByOrder);
 
+/** Get By User
+ * @openapi
+ * /getOrdersByUser:
+ *     get:
+ *       tags:
+ *         - Order
+ *       description: Get active orders by user
+ *       security:
+ *         - bearerToken: []
+ *       responses:
+ *         '200':
+ *           description:
+ *           content:
+ *             application/json:
+ *               schema:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       address_name:
+ *                         type: string
+ *                       lat:
+ *                         type: number
+ *                       lng:
+ *                         type: number
+ *                       total_price:
+ *                         type: number
+ *                       delivery_id:
+ *                         type: string
+ *                       owner:
+ *                         type: string
+ *                       owner_id:
+ *                         type: string
+ *                       observations:
+ *                         type: string
+ *                       state:
+ *                         type: boolean
+ *                       date:
+ *                         type: string
+ *                       taken:
+ *                         type: boolean
+ *                       canceled:
+ *                         type: boolean
+*/
+router.get('/getOrdersByUser', GetOrdersByUser);
 module.exports = {
     routes: router
 }

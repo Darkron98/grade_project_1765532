@@ -15,8 +15,9 @@ const createService = async (req, res, user) => {
         lng: data.lng,
         owner: user,
         owner_id: user_id,
+        date: data.date,
+        observations: data.observations,       
         total_price: data.total_price,
-        date: nowDate.toISOString(),
         state: false,
         taken: false,
         delivery_id: "",
@@ -29,7 +30,6 @@ const createService = async (req, res, user) => {
         var orderItemQuery = await firestore.collection('order').doc(orderCreate.id).collection('items').add({
         item_desc: e.item_desc,
         item_id: e.item_id,
-        observations: e.observations,
         quantity: e.quantity,
         unit_price: e.unit_price
         }   
@@ -52,7 +52,6 @@ const createService = async (req, res, user) => {
         id: e.id,
         item_desc: e.data().item_desc,
         item_id: e.data().item_id,
-        observations: e.data().observations,
         quantity: e.data().quantity,
         unit_price: e.data().unit_price
       });
@@ -66,6 +65,7 @@ const createService = async (req, res, user) => {
       owner: orderQuery.data().owner,
       owner_id: orderQuery.data().owner_id,
       total_price: orderQuery.data().total_price,
+      observations: orderQuery.data().observations,
       date: orderQuery.data().date,
       state: orderQuery.data().state,
       taken: orderQuery.data().taken,
@@ -124,7 +124,7 @@ const shippedService = async (req, res) => {
   const order_id = req.params.id;
     try {
       const updateQuery = await firestore.collection('order').doc(order_id).update({
-          state: false
+          state: true
       });
   
       res.status(200).json({
@@ -135,6 +135,46 @@ const shippedService = async (req, res) => {
         msg: "Internal server error"
       });
     }
+}
+
+const getByUserService = async (req, res, user) => {
+  try{
+    const orderQuery = await firestore.collection('order').where('owner', '==', user).where('state','==',false).get();
+
+    const orderSnapshot = [];
+
+    orderQuery.forEach(doc =>{
+      orderSnapshot.push(doc);
+    });
+
+    const orderRes = orderSnapshot.map(doc => {
+      const data = doc.data;
+      return{
+        id: doc.id,
+        address_name: doc.data().address_name,
+        lat: doc.data().lat,
+        lng: doc.data().lng,
+        owner: doc.data().owner,
+        owner_id: doc.data().owner_id,
+        total_price: doc.data().total_price,
+        observations: doc.data().observations,
+        date: doc.data().date,
+        state: doc.data().state,
+        taken: doc.data().taken,
+        delivery_id: doc.data().delivery_id,
+        canceled: doc.data().canceled,
+    };
+    });
+
+    res.status(200).json({
+        orders: orderRes,
+      }
+    );
+  }catch(e){
+    res.status(500).json({
+      msg: "Internal server error"
+    });
+  }
 }
 
 const getService = async (req, res) => {
@@ -154,9 +194,10 @@ const getService = async (req, res) => {
         address_name: doc.data().address_name,
         lat: doc.data().lat,
         lng: doc.data().lng,
-        owner: doc.data().user,
-        owner_id: doc.data().user_id,
+        owner: doc.data().owner,
+        owner_id: doc.data().owner_id,
         total_price: doc.data().total_price,
+        observations: doc.data().observations,
         date: doc.data().date,
         state: doc.data().state,
         taken: doc.data().taken,
@@ -228,7 +269,6 @@ const addOrderItem = async (req, res) => {
       id: orderItemQuery.id,
       item_desc: orderItemQuery.data().item_desc,
       item_id: orderItemQuery.data().item_id,
-      observations: orderItemQuery.data().observations,
       quantity: orderItemQuery.data().quantity,
       unit_price: orderItemQuery.data().unit_price
     });
@@ -255,7 +295,6 @@ const getItemsByOrder = async (req, res) => {
         id: e.id,
         item_desc: e.data().item_desc,
         item_id: e.data().item_id,
-        observations: e.data().observations,
         quantity: e.data().quantity,
         unit_price: e.data().unit_price
       });
@@ -278,5 +317,6 @@ module.exports = {
     updateOrderItem,
     deleteOrderItem,
     addOrderItem,
-    getItemsByOrder
+    getItemsByOrder,
+    getByUserService
 }

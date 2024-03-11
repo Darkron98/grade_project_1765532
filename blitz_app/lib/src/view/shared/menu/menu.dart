@@ -1,34 +1,69 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/view/shared/menu/widgets/search_text_field.dart';
 
+import '../../../bloc/bloc.dart';
+import '../../../core/model/menu.dart';
 import '../../../style/style.dart';
 import 'widgets/widgets.dart';
 
 class Menu extends StatelessWidget {
-  const Menu({
+  Menu({
     super.key,
     required this.size,
   });
 
   final Size size;
 
+  SwiperController controller = SwiperController();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Tittle(),
-        //const SizedBox(height: 10),
-        CategorySlider(size: size),
-        //const SizedBox(height: 20),
-        SearchTextField(
-          size: size,
-          onChanged: (value) {},
-          label: 'Buscar',
-        ),
-        const FoodCards(),
-        const SizedBox(),
-      ],
+    return BlocBuilder<OrderBloc, OrderState>(
+      builder: (context, state) {
+        if (state.menu.isEmpty && !state.loadingMenu) {
+          BlocProvider.of<OrderBloc>(context).add(GetMenu());
+        }
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Tittle(),
+            //const SizedBox(height: 10),
+            if (state.menu.isNotEmpty) ...[
+              CategorySlider(size: size),
+              SearchTextField(
+                size: size,
+                onChanged: (value) =>
+                    BlocProvider.of<OrderBloc>(context).add(SortWord(value)),
+                label: 'Buscar',
+                onPressed: () => BlocProvider.of<OrderBloc>(context)
+                    .add(SortMenu(controller)),
+              ),
+            ],
+            //const SizedBox(height: 20),
+            state.loadingMenu
+                ? const SizedBox(
+                    height: 260,
+                    width: double.infinity,
+                    child: Center(
+                      child: SizedBox(
+                        width: 75,
+                        height: 75,
+                        child: CircularProgressIndicator(
+                          color: ColorPalette.primary,
+                          strokeWidth: 6,
+                        ),
+                      ),
+                    ),
+                  )
+                : state.menu.isEmpty
+                    ? Container()
+                    : FoodCards(controller: controller),
+            const SizedBox(),
+          ],
+        );
+      },
     );
   }
 }

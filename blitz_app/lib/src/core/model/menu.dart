@@ -116,3 +116,26 @@ class DishUpdate {
         categoryId: categoryId ?? this.categoryId,
       );
 }
+
+class CategoryDishes {
+  CategoryDishes({
+    this.categoryId = '',
+    this.categoryName = '',
+    this.dishes = const [],
+  });
+
+  final String categoryId;
+  final String categoryName;
+  final List<MenuResp> dishes;
+
+  CategoryDishes copyWith({
+    String? categoryId,
+    String? categoryName,
+    List<MenuResp>? dishes,
+  }) =>
+      CategoryDishes(
+        categoryId: categoryId ?? this.categoryId,
+        categoryName: categoryName ?? this.categoryName,
+        dishes: dishes ?? this.dishes,
+      );
+}

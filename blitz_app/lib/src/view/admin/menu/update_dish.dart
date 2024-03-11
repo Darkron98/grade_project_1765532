@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../bloc/menuPrefs/menu_prefs_bloc.dart';
@@ -274,7 +275,7 @@ class _MenuDishListState extends State<MenuDishList> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    '\$ ${state.menuDishes[i].price}',
+                                    '\$ ${MoneyFormatter(amount: state.menuDishes[i].price.toDouble()).output.withoutFractionDigits}',
                                     style: const TextStyle(
                                         color: ColorPalette.textColor,
                                         fontSize: 16,

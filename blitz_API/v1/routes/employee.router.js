@@ -142,39 +142,37 @@ router.get('', getAll);
  *                properties:
  *                  msg:
  *                    type: string
- *                  data_list:
- *                    type: array
- *                    items:
- *                      type: object
- *                      properties:
- *                        user_id:
- *                          type: string
- *                        user_name:
- *                          type: string
- *                        rol:
- *                          type: number
- *                        user_data:
- *                          type: object
- *                          properties:
- *                            first_name:
- *                              type: string
- *                            second_name:
- *                              type: string
- *                            last_name:
- *                              type: string
- *                            mail:
- *                              type: string
- *                            phone:
- *                              type: string
- *                        employee_data:
- *                          type: object
- *                          properties:
- *                            salary:
- *                              type: number
- *                            active:
- *                              type: number
- *                            id_doc:
- *                              type: string
+ *                  data:
+ *                    type: object
+ *                    properties:
+ *                      user_id:
+ *                        type: string
+ *                      user_name:
+ *                        type: string
+ *                      rol:
+ *                        type: number
+ *                      user_data:
+ *                        type: object
+ *                        properties:
+ *                          first_name:
+ *                            type: string
+ *                          second_name:
+ *                            type: string
+ *                          last_name:
+ *                            type: string
+ *                          mail:
+ *                            type: string
+ *                          phone:
+ *                            type: string
+ *                      employee_data:
+ *                        type: object
+ *                        properties:
+ *                          salary:
+ *                            type: number
+ *                          active:
+ *                            type: number
+ *                          id_doc:
+ *                            type: string
 */
 router.get('/:id', getByIdDoc);
 
@@ -237,9 +235,21 @@ router.patch('/dismiss=:id', fireEmployee);
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
+ *             properties:           
+ *               first_name:
+ *                   type: string
+ *               second_name:
+ *                   type: string
+ *               last_name:
+ *                   type: string
+ *               mail:
+ *                   type: string
+ *               phone:
+ *                   type: string
+ *               id_doc:
+ *                   type: string
  *               salary:
- *                 type: number
+ *                   type: number
  *     responses:
  *       '200':
  *          description: Succesful operation

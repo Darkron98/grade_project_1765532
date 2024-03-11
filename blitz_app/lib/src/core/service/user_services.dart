@@ -9,6 +9,8 @@ abstract class UserServiceInterface {
   Future<String> userRegister(RegisterInfo userInfo);
   Future<String> employeeCreate(RegisterEmployee employeeInfo);
   Future<List<RegisterEmployee>> getEmployee(String dni);
+  Future<String> updateEmployee(EmployeeUpdate employeeInfo, String id);
+  Future<String> fireEmployee(String id);
 }
 
 class UserService extends UserServiceInterface {
@@ -96,6 +98,59 @@ class UserService extends UserServiceInterface {
       return resp;
     } catch (e) {
       return [];
+    }
+  }
+
+  @override
+  Future<String> updateEmployee(EmployeeUpdate employeeInfo, String id) async {
+    var name = employeeInfo.name != null ? employeeInfo.name!.split(' ') : null;
+    Map<String, dynamic> body = {
+      if (name != null) ...{
+        "first_name": name[0],
+      },
+      if (name != null) ...{
+        "second_name": name.length > 1 ? name[1] : '',
+      },
+      if (employeeInfo.lastName != null) ...{
+        "last_name": employeeInfo.lastName,
+      },
+      if (employeeInfo.dni != null) ...{
+        "id_doc": employeeInfo.dni,
+      },
+      if (employeeInfo.phone != null) ...{
+        "phone": employeeInfo.phone,
+      },
+      if (employeeInfo.email != null) ...{
+        "mail": employeeInfo.email,
+      },
+      if (employeeInfo.salary != null) ...{
+        "salary": employeeInfo.salary,
+      },
+    };
+    try {
+      Response response = await Dio().put(
+        '${cons.host}/employee/update=$id',
+        data: body,
+        options: Options(headers: header(prefs.token)),
+      );
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return '400';
+    }
+  }
+
+  @override
+  Future<String> fireEmployee(String id) async {
+    try {
+      Response response = await Dio().patch(
+        '${cons.host}/employee/dismiss=$id',
+        options: Options(headers: header(prefs.token)),
+      );
+
+      return response.statusCode.toString();
+    } catch (e) {
+      return '400';
     }
   }
 }

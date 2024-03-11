@@ -9,4 +9,7 @@ class ColorPalette {
   static const Color textColor = Color.fromARGB(255, 241, 229, 229);
   static const Color cartIcons = Color(0xffF9881F);
   static const Color greyText = Color.fromARGB(255, 124, 124, 124);
+  static const Color cancelButton = Color(0xffFBE7E7);
+  static const Color takeButton = Color(0xffDAFAE5);
+  static const Color takeIcon = Color(0xff127835);
 }

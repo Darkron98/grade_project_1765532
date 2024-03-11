@@ -43,3 +43,6 @@ bool validateLogin(String user, String pass) => user.isEmpty || pass.isEmpty;
 
 Map<String, String> header(String token) =>
     {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};
+
+String formatDate(DateTime date) =>
+    '${date.day < 10 ? 0 : ''}${date.day}/${date.month < 10 ? 0 : ''}${date.month}/${date.year}  ${date.hour < 10 ? 0 : ''}${date.hour - (date.hour > 12 ? 12 : 0)}:${date.minute < 10 ? 0 : ''}${date.minute} ${date.hour > 12 && date.minute > 0 ? 'PM' : 'AM'}';

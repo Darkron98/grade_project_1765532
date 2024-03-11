@@ -21,3 +21,18 @@ class SetSrcLocation extends MapEvent {
         srcLng,
       ];
 }
+
+class SetLocation extends MapEvent {
+  const SetLocation(
+    this.lat,
+    this.lng,
+  );
+  final double lat;
+  final double lng;
+
+  @override
+  List<Object> get props => [
+        lat,
+        lng,
+      ];
+}

@@ -4,6 +4,7 @@ import '../logic/shared_preferences.dart';
 import '../model/auth_resp.dart';
 import '../model/auth_user.dart';
 import '../logic/constants.dart' as cons;
+import 'notification_service.dart';
 
 abstract class LoginServicesInterface {
   Future<AuthResp> userAuthenticate(User user);
@@ -37,6 +38,10 @@ class LoginServices extends LoginServicesInterface {
       prefs.token = data.token;
       prefs.user = data.user;
       prefs.rol = data.rol;
+
+      if (data.statusCode.startsWith('2') && data.rol != 3) {
+        subscribeTopic('personal');
+      }
 
       return data;
     } catch (e) {

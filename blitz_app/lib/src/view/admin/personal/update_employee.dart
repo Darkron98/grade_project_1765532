@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grade_project_1765532/src/bloc/register/register_bloc.dart';
 import 'package:grade_project_1765532/src/view/shared/menu/widgets/search_text_field.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../bloc/reg_employee/reg_employee_bloc.dart';
 import '../../../style/style.dart';
 import '../../shared/login/widget/widgets.dart';
+import '../../widgets/snackbar.dart';
 
 void updateEmployeeModal(BuildContext context) {
   Size size = MediaQuery.of(context).size;
@@ -202,6 +202,28 @@ class _EmployeeListTileState extends State<EmployeeListTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 45),
+                              child: Container(
+                                padding: const EdgeInsets.all(7),
+                                decoration: BoxDecoration(
+                                    color: ColorPalette.unFocused,
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => customAlert(context),
+                                      child: const Icon(
+                                        Remix.user_unfollow_line,
+                                        color: ColorPalette.lightBg,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
                             CustomFormField(
                               onChanged: (value) =>
                                   BlocProvider.of<RegEmployeeBloc>(context)
@@ -252,24 +274,53 @@ class _EmployeeListTileState extends State<EmployeeListTile> {
                                 formatter: [
                                   FilteringTextInputFormatter.digitsOnly
                                 ]),
-                            CustomButton(
-                                size: MediaQuery.of(context).size,
-                                onPressed: state.loadingCreate ||
-                                        state.loadingUpdate
-                                    ? null
-                                    : () => BlocProvider.of<RegEmployeeBloc>(
-                                            context)
-                                        .add(const InfoSubmmitt()),
-                                color: ColorPalette.primary,
-                                child: state.loadingUpdate
-                                    ? const SizedBox(
-                                        height: 30,
-                                        width: 30,
-                                        child: CircularProgressIndicator(
-                                          color: ColorPalette.primary,
-                                        ),
-                                      )
-                                    : const Text('Actualizar')),
+                            BlocBuilder<RegEmployeeBloc, RegEmployeeState>(
+                              builder: (context, state) {
+                                return BlocListener<RegEmployeeBloc,
+                                    RegEmployeeState>(
+                                  listener: (context, state) {
+                                    if (state.success) {
+                                      Navigator.pop(context);
+                                      customSnackbar(context,
+                                          message: 'Datos Actualizados',
+                                          type: 'ok');
+                                    } else if (state.failure ||
+                                        state.delFailure) {
+                                      Navigator.pop(context);
+                                      customSnackbar(context,
+                                          message: 'Ups! algo salio mal',
+                                          type: 'error');
+                                    } else if (state.delSuccess) {
+                                      Navigator.pop(context);
+                                      customSnackbar(context,
+                                          message: 'Empleado despedido :c',
+                                          type: 'ok');
+                                    }
+                                  },
+                                  child: CustomButton(
+                                      size: MediaQuery.of(context).size,
+                                      onPressed: state.loadingCreate ||
+                                              state.loadingUpdate ||
+                                              state.loadingDelete
+                                          ? null
+                                          : () =>
+                                              BlocProvider.of<RegEmployeeBloc>(
+                                                      context)
+                                                  .add(const UpdateEmployee()),
+                                      color: ColorPalette.primary,
+                                      child: state.loadingUpdate ||
+                                              state.loadingDelete
+                                          ? const SizedBox(
+                                              height: 30,
+                                              width: 30,
+                                              child: CircularProgressIndicator(
+                                                color: ColorPalette.primary,
+                                              ),
+                                            )
+                                          : const Text('Actualizar')),
+                                );
+                              },
+                            ),
                             const SizedBox(height: 20),
                           ],
                         ),
@@ -284,4 +335,75 @@ class _EmployeeListTileState extends State<EmployeeListTile> {
       },
     );
   }
+}
+
+Future<dynamic> customAlert(BuildContext context) {
+  var bloc = BlocProvider.of<RegEmployeeBloc>(context);
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return BlocProvider.value(
+        value: bloc,
+        child: BlocBuilder<RegEmployeeBloc, RegEmployeeState>(
+          builder: (context, state) {
+            return BlocListener<RegEmployeeBloc, RegEmployeeState>(
+              listener: (context, state) {
+                if (state.delSuccess) {
+                  Navigator.pop(context);
+                }
+              },
+              child: AlertDialog(
+                title:
+                    Text(state.loadingDelete ? 'Procesando' : 'Estas seguro?'),
+                content: state.loadingDelete
+                    ? SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            SizedBox(),
+                            SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                color: ColorPalette.primary,
+                              ),
+                            ),
+                            SizedBox(),
+                          ],
+                        ),
+                      )
+                    : const Text('Deseas despedir a este empleado?'),
+                actions: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor:
+                            const Color.fromARGB(255, 86, 50, 136)),
+                    onPressed: state.loadingDelete
+                        ? null
+                        : () {
+                            BlocProvider.of<RegEmployeeBloc>(context)
+                                .add(const FireEmployee());
+                          },
+                    child: const Text('Aceptar'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: ColorPalette.primary),
+                    onPressed: state.loadingDelete
+                        ? null
+                        : () {
+                            Navigator.of(context).pop();
+                          },
+                    child: const Text('Cerrar'),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
 }

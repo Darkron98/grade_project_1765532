@@ -200,7 +200,7 @@ class _Page2 extends StatelessWidget {
                     Navigator.pop(context);
                     customSnackbar(context,
                         message: 'Empleado registrado!', type: 'ok');
-                  } else if (state.success) {
+                  } else if (state.failure) {
                     customSnackbar(context,
                         message: 'Ups! algo salio mal', type: 'error');
                   }

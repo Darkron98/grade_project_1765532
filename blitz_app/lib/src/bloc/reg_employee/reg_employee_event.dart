@@ -87,3 +87,15 @@ class SetNewState extends RegEmployeeEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateEmployee extends RegEmployeeEvent {
+  const UpdateEmployee();
+  @override
+  List<Object> get props => [];
+}
+
+class FireEmployee extends RegEmployeeEvent {
+  const FireEmployee();
+  @override
+  List<Object> get props => [];
+}
