@@ -21,7 +21,7 @@ void updateEmployeeModal(BuildContext context) {
 }
 
 class ModalContent extends StatelessWidget {
-  const ModalContent({
+  ModalContent({
     super.key,
     required this.bloc,
     required this.size,
@@ -29,6 +29,7 @@ class ModalContent extends StatelessWidget {
 
   final RegEmployeeBloc bloc;
   final Size size;
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +80,7 @@ class ModalContent extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             SearchTextField(
+                              controller: controller,
                               size: size,
                               onChanged: (value) =>
                                   BlocProvider.of<RegEmployeeBloc>(context)

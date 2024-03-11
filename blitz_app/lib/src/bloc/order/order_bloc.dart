@@ -14,8 +14,12 @@ part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc() : super(const OrderState()) {
-    on<SelectCategory>(
-        (event, emit) => emit(state.copyWith(selectedCategory: event.index)));
+    on<SelectCategory>((event, emit) async {
+      emit(state.copyWith(
+          loadingMenu: true, selectedCategory: event.index, startIndex: -1));
+      var awaiter = await Future.delayed(const Duration(milliseconds: 1));
+      emit(state.copyWith(loadingMenu: false));
+    });
     on<GetMenu>(
       (event, emit) async {
         emit(state.copyWith(loadingMenu: true));
@@ -27,12 +31,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<SortMenu>(
       (event, emit) async {
         emit(state.copyWith(loadingMenu: true));
-        var awaiter = await Future.delayed(const Duration(seconds: 1));
+        var awaiter = await Future.delayed(const Duration(milliseconds: 1));
         String searchText = state.sortWord.toLowerCase();
         int index = state.menu[state.selectedCategory].dishes.indexWhere(
             (dish) => dish.dishName.toLowerCase().contains(searchText));
         if (index != -1) {
-          emit(state.copyWith(startIndex: index + 2));
+          emit(state.copyWith(
+              startIndex:
+                  (state.menu[state.selectedCategory].dishes.length - 1) +
+                      index));
         }
         emit(state.copyWith(loadingMenu: false, sortWord: ''));
       },

@@ -13,9 +13,6 @@ Map<String, WidgetBuilder> navigation() => <String, WidgetBuilder>{
               create: (context) => HomeBloc(),
             ),
             BlocProvider(
-              create: (context) => MapBloc(),
-            ),
-            BlocProvider(
               create: (context) => MenuPrefsBloc(),
             ),
             BlocProvider(

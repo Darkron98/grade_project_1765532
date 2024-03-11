@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/view/admin/app_preferences.dart';
+import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 
 import 'package:remixicon/remixicon.dart';
 
 import '../../../bloc/bloc.dart';
+
 import '../../../style/style.dart';
 import '../../view.dart';
 
@@ -41,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     if (newOrder && !BlocProvider.of<OrderBloc>(context).state.loadingOrders) {
+      BlocProvider.of<HomeBloc>(context).add(const NewOrder(true));
       BlocProvider.of<OrderBloc>(context).add(GetOrderList());
+      BlocProvider.of<HomeBloc>(context).add(const NewOrder(false));
       newOrderFlag(false);
     }
     PageController pageController = PageController();
@@ -60,57 +64,71 @@ class _HomeScreenState extends State<HomeScreen> {
               systemNavigationBarDividerColor: Colors.transparent),
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          BlocProvider.of<HomeBloc>(context)
-                              .add(const ChangePage(0));
-                          pageController.animateToPage(
-                            0,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          Navigator.of(context).pushReplacementNamed('login');
-                        },
-                        child: Container(
-                          width: 45,
-                          height: 45,
-                          decoration: BoxDecoration(
-                              color: ColorPalette.lightBg,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Icon(
-                            Remix.logout_box_line,
-                            color: ColorPalette.primary,
-                            size: 22,
+            child: BlocListener<HomeBloc, HomeState>(
+              listener: (context, state) {
+                if (state.newOrder) {
+                  customSnackbar(context,
+                      message: 'Se han actualizado los pedidos', type: 'ok');
+                  BlocProvider.of<HomeBloc>(context).add(const ChangePage(2));
+                  pageController.animateToPage(
+                    2,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              },
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<HomeBloc>(context)
+                                .add(const ChangePage(0));
+                            pageController.animateToPage(
+                              0,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            Navigator.of(context).pushReplacementNamed('login');
+                          },
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                                color: ColorPalette.lightBg,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Icon(
+                              Remix.logout_box_line,
+                              color: ColorPalette.primary,
+                              size: 22,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(),
-                    ],
+                        const SizedBox(),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: size.height - 180,
-                  child: PageView(
-                    controller: pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      Menu(size: size),
-                      ShoppingCart(size: size),
-                      MapScreen(size: size),
-                      //const Management(),
-                      const AppPreferences(),
-                    ],
+                  SizedBox(
+                    height: size.height - 180,
+                    child: PageView(
+                      controller: pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        Menu(size: size),
+                        ShoppingCart(size: size),
+                        MapScreen(size: size),
+                        //const Management(),
+                        const AppPreferences(),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(),
-              ],
+                  const SizedBox(),
+                ],
+              ),
             ),
           ),
         ),

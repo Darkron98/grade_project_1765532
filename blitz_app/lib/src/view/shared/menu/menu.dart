@@ -18,6 +18,7 @@ class Menu extends StatelessWidget {
 
   SwiperController controller = SwiperController();
 
+  TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderBloc, OrderState>(
@@ -33,12 +34,15 @@ class Menu extends StatelessWidget {
             if (state.menu.isNotEmpty) ...[
               CategorySlider(size: size),
               SearchTextField(
+                controller: textController,
                 size: size,
                 onChanged: (value) =>
                     BlocProvider.of<OrderBloc>(context).add(SortWord(value)),
                 label: 'Buscar',
-                onPressed: () => BlocProvider.of<OrderBloc>(context)
-                    .add(SortMenu(controller)),
+                onPressed: () {
+                  textController.clear();
+                  BlocProvider.of<OrderBloc>(context).add(SortMenu(controller));
+                },
               ),
             ],
             //const SizedBox(height: 20),

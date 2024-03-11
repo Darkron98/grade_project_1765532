@@ -153,7 +153,6 @@ class _MenuDishListState extends State<MenuDishList> {
                           borderRadius: BorderRadius.circular(5),
                           child: SizedBox(
                             width: 80,
-                            height: ((80) * 2 / 3),
                             child: GestureDetector(
                               onTap: index == i
                                   ? () async {

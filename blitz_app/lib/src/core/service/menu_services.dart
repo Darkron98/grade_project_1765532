@@ -70,6 +70,7 @@ class MenuService extends MenuServiceInterface {
                 categoryName: e['category_name'],
               ))
           .toList();
+      data.sort((a, b) => a.categoryName.compareTo(b.categoryName));
       return data;
     } catch (e) {
       return [];
@@ -120,6 +121,9 @@ class MenuService extends MenuServiceInterface {
             ),
           )
           .toList();
+      resp.sort((a, b) {
+        return a.dishName.compareTo(b.dishName);
+      });
       return resp;
     } catch (e) {
       return [];
@@ -195,13 +199,14 @@ class MenuService extends MenuServiceInterface {
                   price: dish['price'],
                 ))
             .toList();
-
+        dishes.sort((a, b) => a.dishName.compareTo(b.dishName));
         return CategoryDishes(
           categoryId: e['category_id'],
           categoryName: e['category_name'],
           dishes: dishes,
         );
       }).toList();
+      resp.sort((a, b) => a.categoryName.compareTo(b.categoryName));
       return resp;
     } catch (e) {
       return [];

@@ -3,7 +3,7 @@ part of 'order_bloc.dart';
 class OrderState extends Equatable {
   const OrderState({
     this.selectedCategory = 0,
-    this.startIndex = 2,
+    this.startIndex = -1,
     this.sortWord = '',
     this.observation = '',
     this.loadingMenu = false,

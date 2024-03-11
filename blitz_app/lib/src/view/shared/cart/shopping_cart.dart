@@ -6,7 +6,6 @@ import 'package:remixicon/remixicon.dart';
 import '../../../bloc/bloc.dart';
 import '../../../style/style.dart';
 import '../../widgets/snackbar.dart';
-import '../login/widget/widgets.dart';
 
 class ShoppingCart extends StatelessWidget {
   const ShoppingCart({super.key, required this.size});
@@ -38,7 +37,7 @@ class ShoppingCart extends StatelessWidget {
               const CartTitle(),
               //const SizedBox(height: 20),
               if (state.orderItems.isNotEmpty) ...[
-                const InstructionsPanel(),
+                InstructionsPanel(),
                 const CartItemList(),
                 CheckInButton(
                   size: size,
@@ -53,7 +52,7 @@ class ShoppingCart extends StatelessWidget {
                       color: ColorPalette.lightBg,
                     ),
                     Text(
-                      'Nada agregado aun.',
+                      'Nada agregado aún.',
                       style: TextStyle(
                         color: ColorPalette.lightBg,
                         fontSize: 24,
@@ -121,10 +120,25 @@ class CheckInButton extends StatelessWidget {
   }
 }
 
-class InstructionsPanel extends StatelessWidget {
-  const InstructionsPanel({
+class InstructionsPanel extends StatefulWidget {
+  InstructionsPanel({
     super.key,
   });
+
+  @override
+  State<InstructionsPanel> createState() => _InstructionsPanelState();
+}
+
+class _InstructionsPanelState extends State<InstructionsPanel> {
+  FocusNode focus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    focus.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,14 +154,30 @@ class InstructionsPanel extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                focusNode: focus,
                 onChanged: (value) => BlocProvider.of<OrderBloc>(context)
                     .add(TypeObservations(value)),
                 cursorColor: ColorPalette.textColor,
                 style: const TextStyle(color: ColorPalette.textColor),
                 maxLines: null,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  suffixIcon: focus.hasFocus
+                      ? IconButton(
+                          splashColor: Colors.transparent,
+                          icon: Icon(
+                            Remix.close_line,
+                            color: focus.hasFocus
+                                ? ColorPalette.cartIcons
+                                : ColorPalette.unFocused,
+                            size: 25,
+                          ),
+                          onPressed: () {
+                            focus.unfocus();
+                          },
+                        )
+                      : null,
                   hintText: 'Observaciones',
-                  hintStyle: TextStyle(color: ColorPalette.unFocused),
+                  hintStyle: const TextStyle(color: ColorPalette.unFocused),
                   border: InputBorder.none,
                 ),
               ),
@@ -166,11 +196,14 @@ class CartItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
         return SizedBox(
           width: double.infinity,
-          height: 225,
+          height: state.orderItems.length <= 3
+              ? state.orderItems.length * 75
+              : 3 * 75,
           child: ListView.builder(
             padding: const EdgeInsets.only(left: 15, right: 15),
             physics: const BouncingScrollPhysics(),

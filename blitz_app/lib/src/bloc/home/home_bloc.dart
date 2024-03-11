@@ -9,5 +9,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ChangePage>((event, emit) => emit(
           state.copyWith(indexPage: event.page),
         ));
+    on<NewOrder>(
+      (event, emit) => emit(state.copyWith(newOrder: event.newOrder)),
+    );
   }
 }

@@ -132,11 +132,14 @@ class _OrderListState extends State<OrderList> {
                                             );
                                           },
                                         )
-                                      : const Padding(
-                                          padding: EdgeInsets.only(top: 9),
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 9),
                                           child: Icon(
                                             Remix.shopping_basket_line,
-                                            color: ColorPalette.unFocused,
+                                            color: i == 0
+                                                ? ColorPalette.cartIcons
+                                                : ColorPalette.unFocused,
                                           ),
                                         ),
                                   title: Text(
@@ -388,7 +391,7 @@ class _OrderListState extends State<OrderList> {
                               color: ColorPalette.lightBg,
                             ),
                             Text(
-                              'Sin ordenes aun.',
+                              'Sin ordenes aún.',
                               style: TextStyle(
                                 color: ColorPalette.lightBg,
                                 fontSize: 24,

@@ -13,3 +13,10 @@ class ChangePage extends HomeEvent {
   @override
   List<Object> get props => [page];
 }
+
+class NewOrder extends HomeEvent {
+  const NewOrder(this.newOrder);
+  final bool newOrder;
+  @override
+  List<Object> get props => [newOrder];
+}

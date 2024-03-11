@@ -12,6 +12,7 @@ class SearchTextField extends StatefulWidget {
     this.label,
     required this.onChanged,
     this.onPressed,
+    this.controller,
   });
 
   final Size size;
@@ -21,6 +22,8 @@ class SearchTextField extends StatefulWidget {
   final Function(String)? onChanged;
 
   final void Function()? onPressed;
+
+  final TextEditingController? controller;
 
   @override
   SearchTextFieldState createState() => SearchTextFieldState();
@@ -38,6 +41,8 @@ class SearchTextFieldState extends State<SearchTextField> {
 
   late void Function()? onPressed;
 
+  late TextEditingController? controller;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +54,8 @@ class SearchTextFieldState extends State<SearchTextField> {
     onChanged = super.widget.onChanged;
 
     onPressed = super.widget.onPressed;
+
+    controller = super.widget.controller;
 
     _focusNode.addListener(() {
       setState(() {});
@@ -69,58 +76,56 @@ class SearchTextFieldState extends State<SearchTextField> {
             selectionColor: Color.fromARGB(255, 141, 56, 56),
             selectionHandleColor: ColorPalette.primary),
       ),
-      child: BlocBuilder<OrderBloc, OrderState>(
-        builder: (context, state) => Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40),
-          child: TextField(
-            textAlign: TextAlign.left,
-            focusNode: _focusNode,
-            cursorColor: ColorPalette.textColor,
-            cursorWidth: 1.5,
-            cursorRadius: const Radius.circular(0.5),
-            onChanged: onChanged,
-            style: TextStyle(
-              color: _focusNode.hasFocus
-                  ? ColorPalette.textColor
-                  : ColorPalette.unFocused,
-            ),
-            decoration: InputDecoration(
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: GestureDetector(
-                    onTap: _focusNode.hasFocus ? null : onPressed,
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: _focusNode.hasFocus
-                              ? ColorPalette.lightBg
-                              : ColorPalette.primary,
-                          borderRadius: BorderRadius.circular(40)),
-                      child: Icon(
-                        Remix.search_line,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 40, right: 40),
+        child: TextField(
+          textAlign: TextAlign.left,
+          focusNode: _focusNode,
+          cursorColor: ColorPalette.textColor,
+          controller: controller,
+          cursorWidth: 1.5,
+          cursorRadius: const Radius.circular(0.5),
+          onChanged: onChanged,
+          style: TextStyle(
+            color: _focusNode.hasFocus
+                ? ColorPalette.textColor
+                : ColorPalette.unFocused,
+          ),
+          decoration: InputDecoration(
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(3),
+                child: GestureDetector(
+                  onTap: _focusNode.hasFocus ? null : onPressed,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
                         color: _focusNode.hasFocus
-                            ? ColorPalette.unFocused
-                            : ColorPalette.textColor,
-                      ),
+                            ? ColorPalette.lightBg
+                            : ColorPalette.primary,
+                        borderRadius: BorderRadius.circular(40)),
+                    child: Icon(
+                      Remix.search_line,
+                      color: _focusNode.hasFocus
+                          ? ColorPalette.unFocused
+                          : ColorPalette.textColor,
                     ),
                   ),
                 ),
-                labelText: label,
-                labelStyle: TextStyle(
-                  color: _focusNode.hasFocus
-                      ? ColorPalette.textColor
-                      : ColorPalette.unFocused,
-                ),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide:
-                        const BorderSide(color: ColorPalette.unFocused)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: const BorderSide(color: ColorPalette.primary)),
-                contentPadding: const EdgeInsets.only(left: 20, right: 20)),
-          ),
+              ),
+              labelText: label,
+              labelStyle: TextStyle(
+                color: _focusNode.hasFocus
+                    ? ColorPalette.textColor
+                    : ColorPalette.unFocused,
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(color: ColorPalette.unFocused)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(color: ColorPalette.primary)),
+              contentPadding: const EdgeInsets.only(left: 20, right: 20)),
         ),
       ),
     );
