@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool newOrder;
+  final AudioPlayer _player = AudioPlayer();
 
   void newOrderFlag(bool flag) {
     newOrder = flag;
@@ -44,24 +46,25 @@ class _HomeScreenState extends State<HomeScreen> {
     var size = MediaQuery.of(context).size;
     if (newOrder && !BlocProvider.of<OrderBloc>(context).state.loadingOrders) {
       BlocProvider.of<HomeBloc>(context).add(const NewOrder(true));
+      _player.play(AssetSource('bell.mp3'));
       BlocProvider.of<OrderBloc>(context).add(GetOrderList());
       BlocProvider.of<HomeBloc>(context).add(const NewOrder(false));
       newOrderFlag(false);
     }
     PageController pageController = PageController();
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: ColorPalette.background,
-      bottomNavigationBar: BottomNavBar(
-        pageController: pageController,
-        size: size,
-      ),
-      body: SafeArea(
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(
-              systemNavigationBarColor: ColorPalette.background,
-              systemNavigationBarIconBrightness: Brightness.dark,
-              systemNavigationBarDividerColor: Colors.transparent),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+          systemNavigationBarColor: ColorPalette.lightBg,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarDividerColor: Color.fromARGB(255, 41, 35, 50)),
+      child: Scaffold(
+        extendBody: true,
+        backgroundColor: ColorPalette.background,
+        bottomNavigationBar: BottomNavBar(
+          pageController: pageController,
+          size: size,
+        ),
+        body: SafeArea(
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: BlocListener<HomeBloc, HomeState>(
@@ -93,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
+                            Navigator.of(context).pop();
                             Navigator.of(context).pushReplacementNamed('login');
                           },
                           child: Container(

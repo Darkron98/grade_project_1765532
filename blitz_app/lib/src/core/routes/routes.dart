@@ -8,18 +8,25 @@ import '../../view/view.dart';
 
 Map<String, WidgetBuilder> navigation() => <String, WidgetBuilder>{
       'login': (context) => Login(),
-      'home': (context) => MultiBlocProvider(providers: [
-            BlocProvider(
-              create: (context) => HomeBloc(),
-            ),
-            BlocProvider(
-              create: (context) => MenuPrefsBloc(),
-            ),
-            BlocProvider(
-              create: (context) => RegEmployeeBloc(),
-            ),
-            BlocProvider(
-              create: (context) => OrderBloc(),
-            ),
-          ], child: const HomeScreen()),
+      'home': (context) => WillPopScope(
+            onWillPop: () async {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, 'login');
+              return false;
+            },
+            child: MultiBlocProvider(providers: [
+              BlocProvider(
+                create: (context) => HomeBloc(),
+              ),
+              BlocProvider(
+                create: (context) => MenuPrefsBloc(),
+              ),
+              BlocProvider(
+                create: (context) => RegEmployeeBloc(),
+              ),
+              BlocProvider(
+                create: (context) => OrderBloc(),
+              ),
+            ], child: const HomeScreen()),
+          ),
     };

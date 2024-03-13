@@ -17,7 +17,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<SelectCategory>((event, emit) async {
       emit(state.copyWith(
           loadingMenu: true, selectedCategory: event.index, startIndex: -1));
-      var awaiter = await Future.delayed(const Duration(milliseconds: 1));
+      var awaiter = await Future.delayed(const Duration(milliseconds: 500));
       emit(state.copyWith(loadingMenu: false));
     });
     on<GetMenu>(
@@ -31,7 +31,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<SortMenu>(
       (event, emit) async {
         emit(state.copyWith(loadingMenu: true));
-        var awaiter = await Future.delayed(const Duration(milliseconds: 1));
+        var awaiter = await Future.delayed(const Duration(milliseconds: 500));
         String searchText = state.sortWord.toLowerCase();
         int index = state.menu[state.selectedCategory].dishes.indexWhere(
             (dish) => dish.dishName.toLowerCase().contains(searchText));
@@ -59,16 +59,19 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             unitPrice: dish.price.toDouble());
         int index =
             state.orderItems.indexWhere((e) => e.itemId.contains(item.itemId));
-        if (index == -1) {
+        if (index == -1 && items.length < 9) {
           items.add(item);
-        } else {
-          OrderItem copyItem = items[index].copyWith(
-            quantity: items[index].quantity + 1,
-          );
-          items[index] = copyItem;
+          emit(state.copyWith(itemAdded: true));
+        } else if (index >= 0) {
+          if (items[index].quantity < 10) {
+            OrderItem copyItem = items[index].copyWith(
+              quantity: items[index].quantity + 1,
+            );
+            items[index] = copyItem;
+            emit(state.copyWith(itemAdded: true));
+          }
         }
-        emit(state.copyWith(orderItems: items, itemAdded: true));
-        emit(state.copyWith(itemAdded: false));
+        emit(state.copyWith(orderItems: items, itemAdded: false));
       },
     );
     on<ModifyItemQuatity>(
@@ -82,7 +85,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           item = state.orderItems[event.index]
               .copyWith(quantity: state.orderItems[event.index].quantity - 1);
         }
-        items[event.index] = item;
+        if (item.quantity <= 10) {
+          items[event.index] = item;
+        }
         items.removeWhere((item) => item.quantity <= 0);
         emit(state.copyWith(orderItems: items));
       },

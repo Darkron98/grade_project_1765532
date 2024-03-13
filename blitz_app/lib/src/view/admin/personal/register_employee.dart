@@ -115,6 +115,7 @@ class _Page1 extends StatelessWidget {
                   BlocProvider.of<RegEmployeeBloc>(context).add(TypeDNI(value)),
               label: 'Documento de identidad',
               formatter: [FilteringTextInputFormatter.digitsOnly],
+              inputType: TextInputType.number,
             ),
             const SizedBox(height: 5),
             CustomFormField(
@@ -123,6 +124,7 @@ class _Page1 extends StatelessWidget {
                   .add(TypeEmployeePhone(value)),
               label: 'Telefono',
               formatter: [FilteringTextInputFormatter.digitsOnly],
+              inputType: TextInputType.number,
             ),
             const SizedBox(height: 5),
             CustomFormField(
@@ -132,6 +134,7 @@ class _Page1 extends StatelessWidget {
                       TypeSalary(value.isEmpty ? 0 : double.parse('$value.0'))),
               label: 'Salario',
               formatter: [FilteringTextInputFormatter.digitsOnly],
+              inputType: TextInputType.number,
             ),
           ],
         ),

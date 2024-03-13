@@ -30,7 +30,6 @@ class Menu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Tittle(),
-            //const SizedBox(height: 10),
             if (state.menu.isNotEmpty) ...[
               CategorySlider(size: size),
               SearchTextField(
@@ -47,20 +46,7 @@ class Menu extends StatelessWidget {
             ],
             //const SizedBox(height: 20),
             state.loadingMenu
-                ? const SizedBox(
-                    height: 260,
-                    width: double.infinity,
-                    child: Center(
-                      child: SizedBox(
-                        width: 75,
-                        height: 75,
-                        child: CircularProgressIndicator(
-                          color: ColorPalette.primary,
-                          strokeWidth: 6,
-                        ),
-                      ),
-                    ),
-                  )
+                ? const FoodLoadingCards()
                 : state.menu.isEmpty
                     ? Container()
                     : FoodCards(controller: controller),

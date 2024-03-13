@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/core/model/menu.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -39,7 +40,11 @@ bool validadeDishcreate(MenuReq dish) =>
     dish.description.isEmpty ||
     dish.categoryId.isEmpty;
 
-bool validateLogin(String user, String pass) => user.isEmpty || pass.isEmpty;
+bool validateLogin(String user, String pass) {
+  var userpref = Preferences().remainUser;
+  return (user.isEmpty || pass.isEmpty) &&
+      (Preferences().remainUser.isEmpty || pass.isEmpty);
+}
 
 Map<String, String> header(String token) =>
     {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};

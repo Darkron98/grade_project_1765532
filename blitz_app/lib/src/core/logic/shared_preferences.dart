@@ -38,4 +38,20 @@ class Preferences {
   int get rol {
     return _preferences.getInt('rol') ?? 0;
   }
+
+  set remain(bool value) {
+    _preferences.setBool('remain', value);
+  }
+
+  bool get remain {
+    return _preferences.getBool('remain') ?? false;
+  }
+
+  set remainUser(String value) {
+    _preferences.setString('remainUser', value);
+  }
+
+  String get remainUser {
+    return _preferences.getString('remainUser') ?? '';
+  }
 }

@@ -142,32 +142,51 @@ class _OrderListState extends State<OrderList> {
                                                 : ColorPalette.unFocused,
                                           ),
                                         ),
-                                  title: Text(
-                                    state.orders[i].owner,
-                                    style: const TextStyle(
-                                      color: ColorPalette.textColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  title: Row(
+                                    children: [
+                                      const Icon(
+                                        Remix.phone_fill,
+                                        color: ColorPalette.background,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        state.orders[i].owner,
+                                        style: const TextStyle(
+                                          color: ColorPalette.textColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   subtitle: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
-                                        width: selectIndex == i ? 200 : 150,
-                                        child: Tooltip(
-                                          message: state.orders[i].addressName
-                                              .split(',')[0],
-                                          child: Text(
-                                            state.orders[i].addressName
-                                                .split(',')[0],
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              color: ColorPalette.textColor,
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Remix.map_pin_2_fill,
+                                            color: ColorPalette.background,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: selectIndex == i ? 190 : 140,
+                                            child: Tooltip(
+                                              message: state
+                                                  .orders[i].addressName
+                                                  .split(',')[0],
+                                              child: Text(
+                                                state.orders[i].addressName
+                                                    .split(',')[0],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: ColorPalette.textColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                       if (selectIndex != i) ...[
                                         Text(

@@ -123,6 +123,7 @@ class _Page1 extends StatelessWidget {
                   .add(Price(value.isEmpty ? 0 : double.parse(value))),
               label: 'Precio unitario',
               formatter: [FilteringTextInputFormatter.digitsOnly],
+              inputType: TextInputType.number,
             ),
             const SizedBox(height: 5),
             BlocBuilder<MenuPrefsBloc, MenuPrefsState>(

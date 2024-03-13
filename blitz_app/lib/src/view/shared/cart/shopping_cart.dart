@@ -165,7 +165,7 @@ class _InstructionsPanelState extends State<InstructionsPanel> {
                       ? IconButton(
                           splashColor: Colors.transparent,
                           icon: Icon(
-                            Remix.close_line,
+                            Remix.check_line,
                             color: focus.hasFocus
                                 ? ColorPalette.cartIcons
                                 : ColorPalette.unFocused,
@@ -251,11 +251,15 @@ class CartItemList extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => BlocProvider.of<OrderBloc>(context)
-                            .add(ModifyItemQuatity(index: i, operation: 'add')),
-                        child: const Icon(
+                        onTap: state.orderItems[i].quantity < 10
+                            ? () => BlocProvider.of<OrderBloc>(context).add(
+                                ModifyItemQuatity(index: i, operation: 'add'))
+                            : null,
+                        child: Icon(
                           Remix.add_fill,
-                          color: ColorPalette.cartIcons,
+                          color: state.orderItems[i].quantity < 10
+                              ? ColorPalette.cartIcons
+                              : ColorPalette.background,
                         ),
                       ),
                     ]),

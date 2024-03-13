@@ -21,101 +21,102 @@ class Register extends StatelessWidget {
           height: size.height,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BackButton(size: size, pageController: pageController),
-                Tittle(size: size),
-                CustomFormField(
-                  size: size,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(TypeName(value)),
-                  label: 'Nombre',
-                ),
-                CustomFormField(
-                  size: size,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(TypeLastName(value)),
-                  label: 'Apellido',
-                ),
-                CustomFormField(
-                  size: size,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(TypeEmail(value)),
-                  label: 'E-mail',
-                ),
-                CustomFormField(
-                  size: size,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(TypePhone(value)),
-                  label: 'Telefono',
-                  formatter: [FilteringTextInputFormatter.digitsOnly],
-                ),
-                CustomFormField(
-                  size: size,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(TypeUserName(value)),
-                  label: 'Nombre de usuario',
-                ),
-                CustomFormField(
-                  size: size,
-                  pass: true,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(TypePassword(value)),
-                  label: 'Contraseña',
-                ),
-                CustomFormField(
-                  size: size,
-                  pass: true,
-                  onChanged: (value) => BlocProvider.of<RegisterBloc>(context)
-                      .add(ConfirmationPass(value)),
-                  label: 'Confirmar contraseña',
-                ),
-                BlocBuilder<RegisterBloc, RegisterState>(
-                  builder: (context, state) {
-                    return BlocListener<RegisterBloc, RegisterState>(
-                      listener: (context, state) {
-                        if (state.success) {
-                          pageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          customSnackbar(context,
-                              message: 'Registro completado!', type: 'ok');
-                        } else if (state.failure) {
-                          customSnackbar(context,
-                              message: 'Ups! algo salio mal', type: 'ok');
-                        }
-                      },
-                      child: CustomButton(
+            child: SizedBox(
+              height: size.height - 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  BackButton(size: size, pageController: pageController),
+                  Tittle(size: size),
+                  Column(
+                    children: [
+                      CustomFormField(
                         size: size,
-                        color: state.loading
-                            ? ColorPalette.unFocused
-                            : ColorPalette.primary,
-                        onPressed: state.loading
-                            ? null
-                            : () {
-                                BlocProvider.of<RegisterBloc>(context)
-                                    .add(const ValidateForm());
-                              },
-                        child: state.loading
-                            ? const SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(
-                                  color: ColorPalette.primary,
-                                ),
-                              )
-                            : const Text(
-                                'Registrarse',
-                                style: TextStyle(color: ColorPalette.textColor),
-                              ),
+                        onChanged: (value) =>
+                            BlocProvider.of<RegisterBloc>(context)
+                                .add(TypeName(value)),
+                        label: 'Nombre',
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(),
-              ],
+                      CustomFormField(
+                        size: size,
+                        onChanged: (value) =>
+                            BlocProvider.of<RegisterBloc>(context)
+                                .add(TypeLastName(value)),
+                        label: 'Apellido',
+                      ),
+                      CustomFormField(
+                        size: size,
+                        onChanged: (value) =>
+                            BlocProvider.of<RegisterBloc>(context)
+                                .add(TypePhone(value)),
+                        label: 'Telefono',
+                        formatter: [FilteringTextInputFormatter.digitsOnly],
+                        inputType: TextInputType.number,
+                      ),
+                      CustomFormField(
+                        size: size,
+                        pass: true,
+                        onChanged: (value) =>
+                            BlocProvider.of<RegisterBloc>(context)
+                                .add(TypePassword(value)),
+                        label: 'Contraseña',
+                      ),
+                      CustomFormField(
+                        size: size,
+                        pass: true,
+                        onChanged: (value) =>
+                            BlocProvider.of<RegisterBloc>(context)
+                                .add(ConfirmationPass(value)),
+                        label: 'Confirmar contraseña',
+                      ),
+                    ],
+                  ),
+                  BlocBuilder<RegisterBloc, RegisterState>(
+                    builder: (context, state) {
+                      return BlocListener<RegisterBloc, RegisterState>(
+                        listener: (context, state) {
+                          if (state.success) {
+                            pageController.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            customSnackbar(context,
+                                message: 'Registro completado!', type: 'ok');
+                          } else if (state.failure) {
+                            customSnackbar(context,
+                                message: 'Ups! algo salio mal', type: 'ok');
+                          }
+                        },
+                        child: CustomButton(
+                          size: size,
+                          color: state.loading
+                              ? ColorPalette.unFocused
+                              : ColorPalette.primary,
+                          onPressed: state.loading
+                              ? null
+                              : () {
+                                  BlocProvider.of<RegisterBloc>(context)
+                                      .add(const ValidateForm());
+                                },
+                          child: state.loading
+                              ? const SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: ColorPalette.primary,
+                                  ),
+                                )
+                              : const Text(
+                                  'Registrarse',
+                                  style:
+                                      TextStyle(color: ColorPalette.textColor),
+                                ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

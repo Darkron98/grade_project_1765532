@@ -31,19 +31,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
     on<ValidateForm>(
       (event, emit) async {
-        if (state.email.isNotEmpty &&
-            state.lastName.isNotEmpty &&
+        if (state.lastName.isNotEmpty &&
             state.name.isNotEmpty &&
             state.password.isNotEmpty &&
             state.confirmationPass.isNotEmpty &&
-            state.phone.isNotEmpty &&
-            state.userName.isNotEmpty) {
+            state.phone.isNotEmpty) {
           emit(state.copyWith(loading: true));
           RegisterInfo data = RegisterInfo(
               lastName: state.lastName,
-              userName: state.userName,
+              userName: state.phone,
               name: state.name,
-              email: state.email,
+              email: '',
               phone: state.phone,
               password: state.password);
 

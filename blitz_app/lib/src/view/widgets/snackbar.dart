@@ -77,7 +77,7 @@ void customSnackbar(
                   size: 50,
                 ),
               ),
-              Positioned(
+              /* Positioned(
                 right: 5,
                 top: 27,
                 child: GestureDetector(
@@ -85,13 +85,13 @@ void customSnackbar(
                     child: Icon(
                       Remix.close_fill,
                       color: Colors.white,
-                      size: 20,
+                      size: 30,
                     ),
                   ),
                   onTap: () =>
                       ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                 ),
-              ),
+              ), */
             ],
           ),
         ),

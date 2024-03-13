@@ -29,3 +29,10 @@ class Submitted extends AuthEvent {
   @override
   List<Object> get props => [];
 }
+
+class RemainOption extends AuthEvent {
+  const RemainOption(this.remain);
+  final bool remain;
+  @override
+  List<Object> get props => [remain];
+}

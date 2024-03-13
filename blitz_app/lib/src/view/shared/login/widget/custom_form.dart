@@ -13,6 +13,8 @@ class CustomFormField extends StatefulWidget {
     this.label,
     required this.onChanged,
     this.formatter,
+    this.controller,
+    this.inputType,
   });
 
   final bool? pass;
@@ -24,6 +26,10 @@ class CustomFormField extends StatefulWidget {
   final Function(String)? onChanged;
 
   final List<TextInputFormatter>? formatter;
+
+  final TextEditingController? controller;
+
+  final TextInputType? inputType;
 
   @override
   CustomFormFieldState createState() => CustomFormFieldState();
@@ -46,6 +52,10 @@ class CustomFormFieldState extends State<CustomFormField> {
 
   late List<TextInputFormatter>? formatter;
 
+  late TextEditingController? controller;
+
+  late TextInputType? inputType;
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +71,10 @@ class CustomFormFieldState extends State<CustomFormField> {
     onChanged = super.widget.onChanged;
 
     formatter = super.widget.formatter;
+
+    controller = super.widget.controller;
+
+    inputType = super.widget.inputType;
 
     _focusNode.addListener(() {
       setState(() {});
@@ -94,10 +108,12 @@ class CustomFormFieldState extends State<CustomFormField> {
             bottom: 15,
           ),
           child: TextField(
+            controller: controller,
             textAlign: TextAlign.left,
             inputFormatters: formatter,
             focusNode: _focusNode,
             obscureText: obscure,
+            keyboardType: inputType,
             cursorColor: ColorPalette.textColor,
             cursorWidth: 1.5,
             cursorRadius: const Radius.circular(0.5),

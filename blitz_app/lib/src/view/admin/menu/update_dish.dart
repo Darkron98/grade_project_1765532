@@ -153,6 +153,7 @@ class _MenuDishListState extends State<MenuDishList> {
                           borderRadius: BorderRadius.circular(5),
                           child: SizedBox(
                             width: 80,
+                            //height: (80 * 2) / 3,
                             child: GestureDetector(
                               onTap: index == i
                                   ? () async {
@@ -189,8 +190,8 @@ class _MenuDishListState extends State<MenuDishList> {
                                             ),
                                   if (index == i) ...[
                                     Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
+                                      width: 80,
+                                      height: (80 * 2) / 3,
                                       decoration: const BoxDecoration(
                                           color: Color.fromARGB(106, 0, 0, 0)),
                                       child: Center(
@@ -348,6 +349,7 @@ class _MenuDishListState extends State<MenuDishList> {
                                 formatter: [
                                   FilteringTextInputFormatter.digitsOnly
                                 ],
+                                inputType: TextInputType.number,
                               ),
                               const SizedBox(height: 5),
                               BlocBuilder<MenuPrefsBloc, MenuPrefsState>(

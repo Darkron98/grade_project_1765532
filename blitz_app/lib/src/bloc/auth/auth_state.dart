@@ -1,21 +1,22 @@
 part of 'auth_bloc.dart';
 
 class AuthState extends Equatable {
-  const AuthState({
-    this.userName = 'user',
-    this.pass = 'pass',
-    user,
+  AuthState({
+    this.userName = '',
+    this.pass = '',
     this.loading = false,
     this.success = false,
     this.failure = false,
-  }) : user = const User(user: 'user', pass: 'pass');
+    remain,
+  }) : remain = Preferences().remain;
 
   final String userName;
   final String pass;
-  final User user;
+
   final bool loading;
   final bool success;
   final bool failure;
+  final bool remain;
 
   AuthState copyWith({
     String? userName,
@@ -24,23 +25,24 @@ class AuthState extends Equatable {
     bool? loading,
     bool? success,
     bool? failure,
+    bool? remain,
   }) =>
       AuthState(
         userName: userName ?? this.userName,
         pass: pass ?? this.pass,
-        user: user ?? this.user,
         loading: loading ?? this.loading,
         success: success ?? this.success,
         failure: failure ?? this.failure,
+        remain: remain ?? this.remain,
       );
 
   @override
   List<Object?> get props => [
-        user,
         userName,
         pass,
         loading,
         success,
         failure,
+        remain,
       ];
 }
