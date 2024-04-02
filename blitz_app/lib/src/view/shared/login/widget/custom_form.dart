@@ -15,6 +15,7 @@ class CustomFormField extends StatefulWidget {
     this.formatter,
     this.controller,
     this.inputType,
+    this.helper,
   });
 
   final bool? pass;
@@ -30,6 +31,8 @@ class CustomFormField extends StatefulWidget {
   final TextEditingController? controller;
 
   final TextInputType? inputType;
+
+  final String? helper;
 
   @override
   CustomFormFieldState createState() => CustomFormFieldState();
@@ -56,6 +59,8 @@ class CustomFormFieldState extends State<CustomFormField> {
 
   late TextInputType? inputType;
 
+  late String? helper;
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +80,8 @@ class CustomFormFieldState extends State<CustomFormField> {
     controller = super.widget.controller;
 
     inputType = super.widget.inputType;
+
+    helper = super.widget.helper;
 
     _focusNode.addListener(() {
       setState(() {});
@@ -124,6 +131,8 @@ class CustomFormFieldState extends State<CustomFormField> {
                   : ColorPalette.unFocused,
             ),
             decoration: InputDecoration(
+                helperText: _focusNode.hasFocus ? helper : null,
+                helperStyle: const TextStyle(color: ColorPalette.textColor),
                 suffixIcon: pass ?? false
                     ? IconButton(
                         splashColor: Colors.transparent,

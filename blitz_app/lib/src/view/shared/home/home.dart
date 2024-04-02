@@ -8,6 +8,7 @@ import 'package:grade_project_1765532/src/view/admin/app_preferences.dart';
 import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
 
 import 'package:remixicon/remixicon.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../bloc/bloc.dart';
 
@@ -112,7 +113,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(),
+                        GestureDetector(
+                          onTap: () {
+                            redirectionAlert(context);
+                          },
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: ColorPalette.cartIcons),
+                            child: const Icon(
+                              Remix.draft_line,
+                              color: ColorPalette.textColor,
+                              size: 30,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -171,6 +188,7 @@ class BottomNavBar extends StatelessWidget {
               NavIcon(
                 width: size.width,
                 onTap: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   BlocProvider.of<HomeBloc>(context).add(const ChangePage(0));
                   _pageController.animateToPage(
                     0,
@@ -187,6 +205,7 @@ class BottomNavBar extends StatelessWidget {
               NavIcon(
                 width: size.width,
                 onTap: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   BlocProvider.of<HomeBloc>(context).add(const ChangePage(1));
                   _pageController.animateToPage(
                     1,
@@ -203,6 +222,7 @@ class BottomNavBar extends StatelessWidget {
               NavIcon(
                 width: size.width,
                 onTap: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   BlocProvider.of<HomeBloc>(context).add(const ChangePage(2));
                   _pageController.animateToPage(
                     2,
@@ -220,6 +240,7 @@ class BottomNavBar extends StatelessWidget {
                 NavIcon(
                   width: size.width,
                   onTap: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     BlocProvider.of<HomeBloc>(context).add(const ChangePage(3));
                     _pageController.animateToPage(
                       3,
@@ -272,4 +293,58 @@ class NavIcon extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<dynamic> redirectionAlert(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: ColorPalette.background,
+        title: const Text(
+          'Encuesta',
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'Te invitamos a llenar una encuesta sobre tu experiencia usando nuestra app, gracias por tu apoyo.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(color: ColorPalette.textColor),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Llenar encuesta?',
+              style: TextStyle(color: ColorPalette.textColor),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            style:
+                TextButton.styleFrom(foregroundColor: ColorPalette.unFocused),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cerrar'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
+            onPressed: () async {
+              if (await canLaunchUrl(
+                  Uri.parse('https://forms.gle/JpmwC2tzHJoWMS9Q8'))) {
+                await launchUrl(
+                    Uri.parse('https://forms.gle/JpmwC2tzHJoWMS9Q8'));
+              } else {
+                throw 'No se pudo abrir el enlace https://forms.gle/JpmwC2tzHJoWMS9Q8';
+              }
+            },
+            child: const Text('Aceptar'),
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -3,6 +3,8 @@ import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/core/model/menu.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../model/cart/order.dart';
+
 Future<double> getLocationLat() async {
   try {
     Position position = await Geolocator.getCurrentPosition(
@@ -29,9 +31,9 @@ Future<double> getLocationLong() async {
   }
 }
 
-void getLocationPermission() async {
+Future<PermissionStatus> getLocationPermission() async {
   var status = await Permission.location.request();
-  if (!status.isGranted) {}
+  return status;
 }
 
 bool validadeDishcreate(MenuReq dish) =>
@@ -50,4 +52,32 @@ Map<String, String> header(String token) =>
     {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'};
 
 String formatDate(DateTime date) =>
-    '${date.day < 10 ? 0 : ''}${date.day}/${date.month < 10 ? 0 : ''}${date.month}/${date.year}  ${date.hour < 10 ? 0 : ''}${date.hour - (date.hour > 12 ? 12 : 0)}:${date.minute < 10 ? 0 : ''}${date.minute} ${date.hour > 12 && date.minute > 0 ? 'PM' : 'AM'}';
+    '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}   ${formatHour(date)}';
+
+String formatHour(DateTime dateTime) {
+  String period = dateTime.hour < 12 ? 'AM' : 'PM';
+  int hour = dateTime.hour % 12;
+  if (hour == 0) {
+    hour = 12;
+  }
+  return '${hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')} $period';
+}
+
+bool validateDishQuantity(String id, List<OrderItem> items) {
+  bool val = false;
+  for (int i = 0; i < items.length; i++) {
+    if (items[i].itemId == id) {
+      val = items[i].quantity == 10;
+      break;
+    }
+  }
+  return !val;
+}
+
+double getOrderTotal(List<OrderItem> items) {
+  double total = 0;
+  for (int i = 0; i < items.length; i++) {
+    total = total + (items[i].unitPrice * items[i].quantity);
+  }
+  return total;
+}

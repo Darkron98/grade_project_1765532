@@ -17,4 +17,3 @@ void main() async {
   await prefs.init();
   runApp(const MyApp());
 }
-//TO DO: validar distancia maxima de pedidos,

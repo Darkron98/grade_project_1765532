@@ -36,6 +36,11 @@ class Register extends StatelessWidget {
                             BlocProvider.of<RegisterBloc>(context)
                                 .add(TypeName(value)),
                         label: 'Nombre',
+                        helper: 'Minimo 3 caracteres (solo letras)',
+                        formatter: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z]+')),
+                        ],
                       ),
                       CustomFormField(
                         size: size,
@@ -43,6 +48,11 @@ class Register extends StatelessWidget {
                             BlocProvider.of<RegisterBloc>(context)
                                 .add(TypeLastName(value)),
                         label: 'Apellido',
+                        helper: 'Minimo 3 caracteres (solo letras)',
+                        formatter: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z]+')),
+                        ],
                       ),
                       CustomFormField(
                         size: size,
@@ -50,7 +60,11 @@ class Register extends StatelessWidget {
                             BlocProvider.of<RegisterBloc>(context)
                                 .add(TypePhone(value)),
                         label: 'Telefono',
-                        formatter: [FilteringTextInputFormatter.digitsOnly],
+                        helper: 'Numero de 10 digitos',
+                        formatter: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         inputType: TextInputType.number,
                       ),
                       CustomFormField(
@@ -59,15 +73,20 @@ class Register extends StatelessWidget {
                         onChanged: (value) =>
                             BlocProvider.of<RegisterBloc>(context)
                                 .add(TypePassword(value)),
+                        helper: 'Minimo 6 caracteres',
                         label: 'Contraseña',
                       ),
-                      CustomFormField(
-                        size: size,
-                        pass: true,
-                        onChanged: (value) =>
-                            BlocProvider.of<RegisterBloc>(context)
-                                .add(ConfirmationPass(value)),
-                        label: 'Confirmar contraseña',
+                      BlocBuilder<RegisterBloc, RegisterState>(
+                        builder: (context, state) {
+                          return CustomFormField(
+                            size: size,
+                            pass: true,
+                            onChanged: (value) =>
+                                BlocProvider.of<RegisterBloc>(context)
+                                    .add(ConfirmationPass(value)),
+                            label: 'Confirmar contraseña',
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -84,7 +103,7 @@ class Register extends StatelessWidget {
                                 message: 'Registro completado!', type: 'ok');
                           } else if (state.failure) {
                             customSnackbar(context,
-                                message: 'Ups! algo salio mal', type: 'ok');
+                                message: 'Ups! algo salio mal', type: 'error');
                           }
                         },
                         child: CustomButton(
@@ -94,10 +113,56 @@ class Register extends StatelessWidget {
                               : ColorPalette.primary,
                           onPressed: state.loading
                               ? null
-                              : () {
-                                  BlocProvider.of<RegisterBloc>(context)
-                                      .add(const ValidateForm());
-                                },
+                              : state.lastName.isNotEmpty &&
+                                      state.name.isNotEmpty &&
+                                      state.password.isNotEmpty &&
+                                      state.confirmationPass.isNotEmpty &&
+                                      state.phone.isNotEmpty
+                                  ? () {
+                                      if (state.name.length >= 3) {
+                                        if (state.lastName.length >= 3) {
+                                          if (state.phone.length == 10) {
+                                            if (state.password.length >= 6) {
+                                              if (state.password ==
+                                                  state.confirmationPass) {
+                                                contractAlert(context);
+                                              } else {
+                                                customSnackbar(context,
+                                                    message:
+                                                        'Las contraseñas deben coincidir',
+                                                    type: 'error');
+                                              }
+                                            } else {
+                                              customSnackbar(context,
+                                                  message:
+                                                      'Contraseña muy corta',
+                                                  subtittle:
+                                                      '${state.password.length}/6 caracteres como minimo',
+                                                  type: 'error');
+                                            }
+                                          } else {
+                                            customSnackbar(context,
+                                                message: 'Telefono no valido',
+                                                subtittle:
+                                                    '${state.phone.length}/10 digitos',
+                                                type: 'error');
+                                          }
+                                        } else {
+                                          customSnackbar(context,
+                                              message: 'Apellido no valido',
+                                              subtittle:
+                                                  '${state.lastName.length}/3 caracteres como minimo',
+                                              type: 'error');
+                                        }
+                                      } else {
+                                        customSnackbar(context,
+                                            message: 'Nombre no valido',
+                                            subtittle:
+                                                '${state.name.length}/3 caracteres como minimo',
+                                            type: 'error');
+                                      }
+                                    }
+                                  : null,
                           child: state.loading
                               ? const SizedBox(
                                   height: 30,
@@ -106,10 +171,17 @@ class Register extends StatelessWidget {
                                     color: ColorPalette.primary,
                                   ),
                                 )
-                              : const Text(
+                              : Text(
                                   'Registrarse',
-                                  style:
-                                      TextStyle(color: ColorPalette.textColor),
+                                  style: TextStyle(
+                                      color: state.lastName.isNotEmpty &&
+                                              state.name.isNotEmpty &&
+                                              state.password.isNotEmpty &&
+                                              state.confirmationPass
+                                                  .isNotEmpty &&
+                                              state.phone.isNotEmpty
+                                          ? ColorPalette.textColor
+                                          : ColorPalette.unFocused),
                                 ),
                         ),
                       );
@@ -188,10 +260,13 @@ class BackButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () => pageController.previousPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            ),
+            onTap: () {
+              BlocProvider.of<RegisterBloc>(context).add(const ResetForm());
+              pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
             child: Container(
               width: 45,
               height: 45,
@@ -212,4 +287,42 @@ class BackButton extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<dynamic> contractAlert(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: ColorPalette.background,
+        title: const Text(
+          'Terminos y condiciones',
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        content: const Text(
+          'Acepta que la información que acaba de ingresar y la ubicación de su telefono sean usadas unica y exclusivamente para las operaciones de servicio a domicilio realizadas a traves de Blitz.',
+          textAlign: TextAlign.justify,
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        actions: [
+          TextButton(
+            style:
+                TextButton.styleFrom(foregroundColor: ColorPalette.unFocused),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cerrar'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
+            onPressed: () {
+              Navigator.of(context).pop();
+              BlocProvider.of<RegisterBloc>(context).add(const ValidateForm());
+            },
+            child: const Text('Aceptar'),
+          ),
+        ],
+      );
+    },
+  );
 }

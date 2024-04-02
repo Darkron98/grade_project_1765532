@@ -69,3 +69,9 @@ class ValidateForm extends RegisterEvent {
   @override
   List<Object> get props => [];
 }
+
+class ResetForm extends RegisterEvent {
+  const ResetForm();
+  @override
+  List<Object> get props => [];
+}

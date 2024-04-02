@@ -5,6 +5,7 @@ import 'package:money_formatter/money_formatter.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../../bloc/bloc.dart';
+import '../../../../core/logic/functions.dart';
 import '../../../../style/style.dart';
 import '../../../widgets/snackbar.dart';
 
@@ -149,15 +150,34 @@ class FoodCards extends StatelessWidget {
                                           padding: const EdgeInsets.only(
                                               right: 10, bottom: 10),
                                           child: GestureDetector(
-                                            onTap: () =>
+                                            onTap: () {
+                                              if (validateDishQuantity(
+                                                state
+                                                    .menu[
+                                                        state.selectedCategory]
+                                                    .dishes[i]
+                                                    .dishId,
+                                                state.orderItems,
+                                              )) {
                                                 BlocProvider.of<OrderBloc>(
                                                         context)
-                                                    .add(AddOrderItem(i)),
+                                                    .add(AddOrderItem(i));
+                                              }
+                                            },
                                             child: Container(
                                               width: 40,
                                               height: 40,
                                               decoration: BoxDecoration(
-                                                  color: ColorPalette.primary,
+                                                  color: validateDishQuantity(
+                                                    state
+                                                        .menu[state
+                                                            .selectedCategory]
+                                                        .dishes[i]
+                                                        .dishId,
+                                                    state.orderItems,
+                                                  )
+                                                      ? ColorPalette.primary
+                                                      : ColorPalette.greyText,
                                                   borderRadius:
                                                       BorderRadius.circular(7)),
                                               child: const Icon(
@@ -260,10 +280,10 @@ class FoodCards extends StatelessWidget {
                                         padding: const EdgeInsets.only(
                                             right: 10, bottom: 10),
                                         child: GestureDetector(
-                                          onTap: () =>
-                                              BlocProvider.of<OrderBloc>(
-                                                      context)
-                                                  .add(const AddOrderItem(0)),
+                                          onTap: () {
+                                            BlocProvider.of<OrderBloc>(context)
+                                                .add(const AddOrderItem(0));
+                                          },
                                           child: Container(
                                             width: 40,
                                             height: 40,

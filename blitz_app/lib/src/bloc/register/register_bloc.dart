@@ -29,28 +29,29 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<TypeUserName>(
       (event, emit) => emit(state.copyWith(userName: event.userName)),
     );
+    on<ResetForm>(
+      (event, emit) => emit(const RegisterState()),
+    );
     on<ValidateForm>(
       (event, emit) async {
-        if (state.lastName.isNotEmpty &&
-            state.name.isNotEmpty &&
-            state.password.isNotEmpty &&
-            state.confirmationPass.isNotEmpty &&
-            state.phone.isNotEmpty) {
-          emit(state.copyWith(loading: true));
-          RegisterInfo data = RegisterInfo(
-              lastName: state.lastName,
-              userName: state.phone,
-              name: state.name,
-              email: '',
-              phone: state.phone,
-              password: state.password);
+        emit(state.copyWith(loading: true));
+        RegisterInfo data = RegisterInfo(
+            lastName: state.lastName,
+            userName: state.phone,
+            name: state.name,
+            email: '',
+            phone: '+57-${state.phone}',
+            password: state.password);
 
-          var resp = await UserService().userRegister(data);
+        var resp = await UserService().userRegister(data);
 
-          emit(state.copyWith(
-            success: resp.startsWith('2'),
-            failure: !RegExp(r'^2').hasMatch(resp),
-          ));
+        emit(state.copyWith(
+          success: resp.startsWith('2'),
+          failure: !RegExp(r'^2').hasMatch(resp),
+        ));
+        if (state.success) {
+          emit(const RegisterState());
+        } else if (state.failure) {
           emit(state.copyWith(loading: false, success: false, failure: false));
         }
       },

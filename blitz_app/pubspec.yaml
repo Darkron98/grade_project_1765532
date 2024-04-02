@@ -54,6 +54,7 @@ dependencies:
   firebase_messaging: ^14.7.10
   money_formatter: ^0.0.4
   audioplayers: ^4.1.0
+  app_settings: ^5.1.1
 
 dev_dependencies:
   flutter_test:

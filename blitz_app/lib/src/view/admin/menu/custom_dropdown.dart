@@ -18,32 +18,27 @@ class CustomModal extends StatefulWidget {
   final MenuPrefsBloc bloc;
 
   @override
-  _CustomModalState createState() => _CustomModalState(
-        size: size,
-        label: label,
-        bloc: bloc,
-      );
+  CustomModalState createState() => CustomModalState();
 }
 
-class _CustomModalState extends State<CustomModal> {
-  _CustomModalState({
-    required this.size,
-    this.label,
-    required this.bloc,
-  });
+class CustomModalState extends State<CustomModal> {
+  CustomModalState();
+
   final FocusNode _focusNode = FocusNode();
 
-  final Size size;
-  final String? label;
+  late Size size;
+  late String? label;
+  late MenuPrefsBloc bloc;
+  late String selectCategory = '';
 
   bool deployed = false;
-  final MenuPrefsBloc bloc;
-  late String selectCategory = '';
 
   @override
   void initState() {
     super.initState();
-
+    size = super.widget.size;
+    label = super.widget.label;
+    bloc = super.widget.bloc;
     _focusNode.addListener(
       () {
         setState(() {});

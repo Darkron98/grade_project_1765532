@@ -30,18 +30,20 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
     on<SortMenu>(
       (event, emit) async {
-        emit(state.copyWith(loadingMenu: true));
-        var awaiter = await Future.delayed(const Duration(milliseconds: 500));
-        String searchText = state.sortWord.toLowerCase();
-        int index = state.menu[state.selectedCategory].dishes.indexWhere(
-            (dish) => dish.dishName.toLowerCase().contains(searchText));
-        if (index != -1) {
-          emit(state.copyWith(
-              startIndex:
-                  (state.menu[state.selectedCategory].dishes.length - 1) +
-                      index));
+        if (state.sortWord.isNotEmpty) {
+          emit(state.copyWith(loadingMenu: true));
+          var awaiter = await Future.delayed(const Duration(milliseconds: 500));
+          String searchText = state.sortWord.toLowerCase();
+          int index = state.menu[state.selectedCategory].dishes.indexWhere(
+              (dish) => dish.dishName.toLowerCase().contains(searchText));
+          if (index != -1) {
+            emit(state.copyWith(
+                startIndex:
+                    (state.menu[state.selectedCategory].dishes.length - 1) +
+                        index));
+          }
+          emit(state.copyWith(loadingMenu: false, sortWord: ''));
         }
-        emit(state.copyWith(loadingMenu: false, sortWord: ''));
       },
     );
     on<SortWord>(

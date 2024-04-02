@@ -247,7 +247,11 @@ class MenuService extends MenuServiceInterface {
         options: Options(headers: header(prefs.token)),
       );
       if (response.statusCode.toString().startsWith('2')) {
-        sendNotificationToTopic('personal');
+        sendNotificationToTopic(
+          channel: 'personal',
+          title: 'Nuevo pedido',
+          message: 'Un cliente ha hechi pedido',
+        );
       }
       return response.statusCode.toString();
     } catch (e) {
@@ -299,7 +303,11 @@ class MenuService extends MenuServiceInterface {
         options: Options(headers: header(prefs.token)),
       );
       if (response.statusCode.toString().startsWith('2')) {
-        sendNotificationToTopic('personal');
+        sendNotificationToTopic(
+          channel: 'personal',
+          title: 'Nuevo pedido',
+          message: 'Un cliente ha hechi pedido',
+        );
       }
       return response.statusCode.toString();
     } catch (e) {
@@ -315,7 +323,11 @@ class MenuService extends MenuServiceInterface {
         options: Options(headers: header(prefs.token)),
       );
       if (response.statusCode.toString().startsWith('2')) {
-        sendNotificationToTopic('personal');
+        sendNotificationToTopic(
+          channel: 'personal',
+          title: 'Nuevo pedido',
+          message: 'Un cliente ha hechi pedido',
+        );
       }
       return response.statusCode.toString();
     } catch (e) {
@@ -331,7 +343,11 @@ class MenuService extends MenuServiceInterface {
         options: Options(headers: header(prefs.token)),
       );
       if (response.statusCode.toString().startsWith('2')) {
-        sendNotificationToTopic('personal');
+        sendNotificationToTopic(
+          channel: 'personal',
+          title: 'Nuevo pedido',
+          message: 'Un cliente ha hechi pedido',
+        );
       }
       return response.statusCode.toString();
     } catch (e) {

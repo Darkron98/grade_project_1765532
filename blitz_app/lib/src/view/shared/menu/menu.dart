@@ -35,10 +35,15 @@ class Menu extends StatelessWidget {
               SearchTextField(
                 controller: textController,
                 size: size,
-                onChanged: (value) =>
-                    BlocProvider.of<OrderBloc>(context).add(SortWord(value)),
+                onChanged: (value) {
+                  BlocProvider.of<OrderBloc>(context).add(SortWord(value));
+                },
                 label: 'Buscar',
                 onPressed: () {
+                  textController.clear();
+                  BlocProvider.of<OrderBloc>(context).add(SortMenu(controller));
+                },
+                onSubmitted: (value) {
                   textController.clear();
                   BlocProvider.of<OrderBloc>(context).add(SortMenu(controller));
                 },

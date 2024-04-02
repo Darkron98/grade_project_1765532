@@ -6,17 +6,21 @@ void subscribeTopic(String tituloTopico) {
   FirebaseMessaging.instance.subscribeToTopic(tituloTopico);
 }
 
-Future<void> sendNotificationToTopic(String tituloTopico) async {
+Future<void> sendNotificationToTopic(
+    {required String channel,
+    required String title,
+    required String message}) async {
   String servidorFCM = 'https://fcm.googleapis.com/fcm/send';
   String tokenServidorFCM =
       'AAAAEZZn7W4:APA91bHRGdwzengbTr9AWkZBjzB0lEWIiw-8-HgeaQotztail18fzxoAZoRvjxyVdQdtcbNV2TnRX05K6Q3ySUr6x2-c5bdL4a0FaoNlRGoNyLBbYmKCzWxJozKg_iCMZi1H638J5xso'; // Puedes obtenerlo desde la consola de Firebase
 
   final Map<String, dynamic> mensajeFCM = {
     'notification': {
-      'title': 'Pedido nuevo',
-      'body': 'Un cliente ha creado un nuevo pedido'
+      'title': title,
+      'body': message,
+      'icon': 'blitz_noti_icon',
     },
-    'to': '/topics/$tituloTopico'
+    'to': '/topics/$channel'
   };
 
   Response resp = await Dio().post(
@@ -29,9 +33,8 @@ Future<void> sendNotificationToTopic(String tituloTopico) async {
   );
 
   if (resp.statusCode == 200) {
-    print('Notificación enviada al tópico $tituloTopico');
+    print('Notificación enviada al tópico $channel');
   } else {
-    print(
-        'Error al enviar la notificación al tópico $tituloTopico: ${resp.data}');
+    print('Error al enviar la notificación al tópico $channel: ${resp.data}');
   }
 }

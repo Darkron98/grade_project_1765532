@@ -41,6 +41,8 @@ class LoginServices extends LoginServicesInterface {
 
       if (data.statusCode.startsWith('2') && data.rol != 3) {
         subscribeTopic('personal');
+      } else if (data.statusCode.startsWith('2') && data.rol == 3) {
+        subscribeTopic(data.user);
       }
 
       return data;

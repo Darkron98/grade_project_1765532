@@ -43,7 +43,13 @@
             android:value="2" />
         <meta-data 
             android:name ="com.google.android.geo.API_KEY" 
-            android:value = "AIzaSyD9KHPOIW5Mka2Kt6eTmZzzW6jj7RgxDZQ"/>         
+            android:value = "AIzaSyD9KHPOIW5Mka2Kt6eTmZzzW6jj7RgxDZQ"/>
+            <!-- Provide required visibility configuration for API level 30 and above -->
     </application>
+    <queries>
+          <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+          </intent>
+        </queries>      
 </manifest>
 

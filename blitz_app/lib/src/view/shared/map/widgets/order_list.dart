@@ -3,7 +3,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
+import 'package:grade_project_1765532/src/view/shared/cart/shopping_cart.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -92,8 +94,10 @@ class _OrderListState extends State<OrderList> {
                                           builder: (context, mapState) {
                                             return GestureDetector(
                                               onTap: () async {
-                                                if (mapState.srcLat == 0 &&
-                                                    mapState.srcLng == 0) {
+                                                bool serviceEnabled =
+                                                    await Geolocator
+                                                        .isLocationServiceEnabled();
+                                                if (serviceEnabled) {
                                                   double lat =
                                                       await getLocationLat();
                                                   double long =
@@ -103,17 +107,21 @@ class _OrderListState extends State<OrderList> {
                                                           context)
                                                       .add(SetSrcLocation(
                                                           lat, long));
+
+                                                  BlocProvider.of<MapBloc>(
+                                                          context)
+                                                      .add(SetLocation(
+                                                          state.orders[i].lat,
+                                                          state.orders[i].lng));
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const NavigationWidget()));
+                                                } else {
+                                                  locationIncactiveAlert(
+                                                      context);
                                                 }
-                                                BlocProvider.of<MapBloc>(
-                                                        context)
-                                                    .add(SetLocation(
-                                                        state.orders[i].lat,
-                                                        state.orders[i].lng));
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const NavigationWidget()));
                                               },
                                               child: Container(
                                                 padding:
@@ -188,14 +196,6 @@ class _OrderListState extends State<OrderList> {
                                           ),
                                         ],
                                       ),
-                                      if (selectIndex != i) ...[
-                                        Text(
-                                          '\$ ${MoneyFormatter(amount: state.orders[i].totalPrice).output.withoutFractionDigits}',
-                                          style: const TextStyle(
-                                            color: ColorPalette.textColor,
-                                          ),
-                                        ),
-                                      ],
                                     ],
                                   ),
                                   trailing: Icon(

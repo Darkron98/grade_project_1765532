@@ -93,7 +93,7 @@ const takeService = async (req, res, user) => {
     });
 
     res.status(200).json({
-      msg: "Order taken successfuly"
+      msg: "Orden tomada"
     });
   } catch (error) {
     res.status(500).json({
@@ -106,13 +106,25 @@ const cancelService = async (req, res) => {
   const order_id = req.params.id;
   
     try {
-      const updateQuery = await firestore.collection('order').doc(order_id).update({
+      const order_query = await await firestore.collection('order').doc(order_id);
+      const orderSnapshot = [];
+      orderQuery.forEach(doc =>{
+        orderSnapshot.push(doc);
+      });
+      var doc = orderSnapshot[0];
+      if(doc.data.taken){
+        res.status(400).json({
+          msg: "La orden ya fue tomada"
+        });
+      }else{
+        const updateQuery = await firestore.collection('order').doc(order_id).update({
           canceled: true
-      });
-  
-      res.status(200).json({
-        msg: "Order canceled successfuly"
-      });
+        });
+        res.status(200).json({
+          msg: "Orden cancelada"
+        });
+      }
+      
     } catch (error) {
       res.status(500).json({
         msg: "Internal server error"

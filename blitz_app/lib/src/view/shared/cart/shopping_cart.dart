@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:grade_project_1765532/src/core/logic/functions.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -37,11 +41,50 @@ class ShoppingCart extends StatelessWidget {
               const CartTitle(),
               //const SizedBox(height: 20),
               if (state.orderItems.isNotEmpty) ...[
-                InstructionsPanel(),
+                const InstructionsPanel(),
                 const CartItemList(),
+                Column(
+                  children: [
+                    const Divider(color: ColorPalette.darkBg),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(),
+                        const Text(
+                          'Total',
+                          style: TextStyle(
+                            color: ColorPalette.textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(),
+                        Text(
+                          '\$ ${MoneyFormatter(amount: getOrderTotal(state.orderItems)).output.withoutFractionDigits}',
+                          style: const TextStyle(
+                            color: ColorPalette.textColor,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(color: ColorPalette.darkBg),
+                  ],
+                ),
                 CheckInButton(
                   size: size,
-                  onPressed: () => orderAlert(context),
+                  onPressed: () async {
+                    bool serviceEnabled =
+                        await Geolocator.isLocationServiceEnabled();
+                    if (serviceEnabled) {
+                      orderAlert(context);
+                    } else {
+                      locationIncactiveAlert(context);
+                    }
+                  },
                 ),
               ] else ...[
                 Column(
@@ -121,7 +164,7 @@ class CheckInButton extends StatelessWidget {
 }
 
 class InstructionsPanel extends StatefulWidget {
-  InstructionsPanel({
+  const InstructionsPanel({
     super.key,
   });
 
@@ -196,7 +239,6 @@ class CartItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
         return SizedBox(
@@ -216,7 +258,7 @@ class CartItemList extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                '\$ ${MoneyFormatter(amount: state.orderItems[i].unitPrice).output.withoutFractionDigits}',
+                '\$ ${MoneyFormatter(amount: state.orderItems[i].unitPrice * state.orderItems[i].quantity).output.withoutFractionDigits}',
                 style: const TextStyle(
                   color: ColorPalette.textColor,
                 ),
@@ -328,12 +370,25 @@ Future<dynamic> orderAlert(BuildContext context) {
                 }
               },
               child: AlertDialog(
-                content: const Text('Guardar todo y terminar?'),
+                backgroundColor: ColorPalette.background,
+                content: const Text(
+                  'Guardar todo y terminar?',
+                  style: TextStyle(color: ColorPalette.textColor),
+                ),
                 actions: [
                   TextButton(
                     style: TextButton.styleFrom(
-                        foregroundColor:
-                            const Color.fromARGB(255, 86, 50, 136)),
+                        foregroundColor: ColorPalette.unFocused),
+                    onPressed: state.loadingOrder
+                        ? null
+                        : () {
+                            Navigator.of(context).pop();
+                          },
+                    child: const Text('Cerrar'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: ColorPalette.primary),
                     onPressed: state.loadingOrder
                         ? null
                         : () {
@@ -343,21 +398,48 @@ Future<dynamic> orderAlert(BuildContext context) {
                           },
                     child: const Text('Aceptar'),
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        foregroundColor: ColorPalette.primary),
-                    onPressed: state.loadingOrder
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                          },
-                    child: const Text('Cerrar'),
-                  ),
                 ],
               ),
             );
           },
         ),
+      );
+    },
+  );
+}
+
+Future<dynamic> locationIncactiveAlert(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: ColorPalette.background,
+        title: const Text(
+          'GPS desactivado!',
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        content: const Text(
+          'Necesita activar el GPS.',
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        actions: [
+          TextButton(
+            style:
+                TextButton.styleFrom(foregroundColor: ColorPalette.unFocused),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cerrar'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
+            onPressed: () {
+              Navigator.pop(context);
+              Geolocator.openLocationSettings();
+            },
+            child: const Text('activar'),
+          ),
+        ],
       );
     },
   );

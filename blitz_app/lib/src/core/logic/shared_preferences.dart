@@ -54,4 +54,12 @@ class Preferences {
   String get remainUser {
     return _preferences.getString('remainUser') ?? '';
   }
+
+  set userContract(bool value) {
+    _preferences.setBool('userContract', value);
+  }
+
+  bool get userContract {
+    return _preferences.getBool('userContract') ?? false;
+  }
 }

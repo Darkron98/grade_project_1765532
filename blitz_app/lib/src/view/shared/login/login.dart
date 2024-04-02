@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +8,7 @@ import 'package:grade_project_1765532/src/bloc/bloc.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/view/shared/register/register.dart';
 import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/logic/functions.dart';
 import '../../../style/style.dart';
@@ -19,7 +23,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    getLocationPermission();
+    //getLocationPermission();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           systemNavigationBarColor: ColorPalette.background,
@@ -97,9 +101,22 @@ class Login extends StatelessWidget {
                                         validateLogin(
                                             state.userName, state.pass)
                                     ? null
-                                    : () {
-                                        BlocProvider.of<AuthBloc>(context)
-                                            .add(const Submitted());
+                                    : () async {
+                                        if (await Permission
+                                            .location.isGranted) {
+                                          BlocProvider.of<AuthBloc>(context)
+                                              .add(const Submitted());
+                                        } else if (await Permission
+                                            .location.isPermanentlyDenied) {
+                                          locationAlert(context);
+                                        } else {
+                                          var locationStatus =
+                                              await getLocationPermission();
+                                          if (locationStatus.isGranted) {
+                                            BlocProvider.of<AuthBloc>(context)
+                                                .add(const Submitted());
+                                          }
+                                        }
                                       },
                                 child: state.loading
                                     ? const SizedBox(
@@ -176,4 +193,35 @@ class _Tittle extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<dynamic> locationAlert(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error!'),
+        content: const Text('Necesita otorgar permisos de localizacion'),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 86, 50, 136)),
+            onPressed: () {
+              AppSettings.openAppSettings();
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, 'login');
+            },
+            child: const Text('Ir a ajustes'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cerrar'),
+          ),
+        ],
+      );
+    },
+  );
 }
