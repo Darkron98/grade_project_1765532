@@ -250,7 +250,8 @@ class MenuService extends MenuServiceInterface {
         sendNotificationToTopic(
           channel: 'personal',
           title: 'Nuevo pedido',
-          message: 'Un cliente ha hechi pedido',
+          message:
+              'Un cliente ha hecho un nuevo pedido\t\t\t \n${Preferences().user}\n${address.split(',')[0]}\n${formatOrderItems(req.items)}',
         );
       }
       return response.statusCode.toString();
@@ -305,8 +306,8 @@ class MenuService extends MenuServiceInterface {
       if (response.statusCode.toString().startsWith('2')) {
         sendNotificationToTopic(
           channel: 'personal',
-          title: 'Nuevo pedido',
-          message: 'Un cliente ha hechi pedido',
+          title: 'Pedido cancelado',
+          message: 'Un cliente ha cancelado un pedido',
         );
       }
       return response.statusCode.toString();
@@ -325,8 +326,8 @@ class MenuService extends MenuServiceInterface {
       if (response.statusCode.toString().startsWith('2')) {
         sendNotificationToTopic(
           channel: 'personal',
-          title: 'Nuevo pedido',
-          message: 'Un cliente ha hechi pedido',
+          title: 'Pedidos actualizados',
+          message: 'La lista de pedidos se ha actualizado',
         );
       }
       return response.statusCode.toString();
@@ -345,8 +346,8 @@ class MenuService extends MenuServiceInterface {
       if (response.statusCode.toString().startsWith('2')) {
         sendNotificationToTopic(
           channel: 'personal',
-          title: 'Nuevo pedido',
-          message: 'Un cliente ha hechi pedido',
+          title: 'Pedidos actualizados',
+          message: 'La lista de pedidos se ha actualizado',
         );
       }
       return response.statusCode.toString();

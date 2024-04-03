@@ -1,8 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/core/model/menu.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:money_formatter/money_formatter.dart';
+import 'package:notification_permissions/notification_permissions.dart'
+    as notification;
+import 'package:permission_handler/permission_handler.dart' as locate;
 
+import '../../view/shared/login/login.dart';
 import '../model/cart/order.dart';
 
 Future<double> getLocationLat() async {
@@ -31,8 +38,19 @@ Future<double> getLocationLong() async {
   }
 }
 
-Future<PermissionStatus> getLocationPermission() async {
-  var status = await Permission.location.request();
+Future<locate.PermissionStatus> getLocationPermission() async {
+  var status = await locate.Permission.location.request();
+  return status;
+}
+
+Future<notification.PermissionStatus> getNotiPermission(
+    BuildContext context) async {
+  var status = await notification.NotificationPermissions
+      .getNotificationPermissionStatus();
+  if (status.name != 'granted') {
+    notificationAlert(context);
+  }
+
   return status;
 }
 
@@ -80,4 +98,16 @@ double getOrderTotal(List<OrderItem> items) {
     total = total + (items[i].unitPrice * items[i].quantity);
   }
   return total;
+}
+
+String formatOrderItems(List<OrderItem> items) {
+  String formatString = '';
+  double totalPrice = 0;
+  for (int i = 0; i < items.length; i++) {
+    formatString =
+        '$formatString * ${items[i].itemDesc} : ${items[i].quantity}\n';
+    totalPrice = totalPrice + items[i].unitPrice * items[i].quantity;
+  }
+  return formatString =
+      '${formatString}Total : \$ ${MoneyFormatter(amount: totalPrice).output.withoutFractionDigits}';
 }

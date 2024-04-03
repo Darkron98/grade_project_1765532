@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorPalette {
-  static const Color primary = Color(0xffE94040);
+  static const Color primary = Color(0xffe94040);
   static const Color background = Color(0xff201C2A);
   static const Color lightBg = Color(0xff2B2534);
   static const Color darkBg = Color(0xff191621);

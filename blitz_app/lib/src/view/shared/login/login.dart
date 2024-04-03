@@ -8,6 +8,7 @@ import 'package:grade_project_1765532/src/bloc/bloc.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
 import 'package:grade_project_1765532/src/view/shared/register/register.dart';
 import 'package:grade_project_1765532/src/view/widgets/snackbar.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/logic/functions.dart';
@@ -22,7 +23,9 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
+    if (!Preferences().requestNotiPerm) {
+      getNotiPermission(context);
+    }
     //getLocationPermission();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -200,12 +203,26 @@ Future<dynamic> locationAlert(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Error!'),
-        content: const Text('Necesita otorgar permisos de localizacion'),
+        backgroundColor: ColorPalette.background,
+        title: const Text(
+          'Error!',
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        content: const Text(
+          'Necesita otorgar permisos de localizacion',
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(
-                foregroundColor: const Color.fromARGB(255, 86, 50, 136)),
+            style:
+                TextButton.styleFrom(foregroundColor: ColorPalette.unFocused),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cerrar'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
             onPressed: () {
               AppSettings.openAppSettings();
               Navigator.pop(context);
@@ -213,12 +230,42 @@ Future<dynamic> locationAlert(BuildContext context) {
             },
             child: const Text('Ir a ajustes'),
           ),
+        ],
+      );
+    },
+  );
+}
+
+Future<dynamic> notificationAlert(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: ColorPalette.background,
+        content: const Text(
+          'Blitz solicita permisos para mostrar notificaciones (opcional).',
+          textAlign: TextAlign.justify,
+          style: TextStyle(color: ColorPalette.textColor),
+        ),
+        actions: [
           TextButton(
-            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
+            style:
+                TextButton.styleFrom(foregroundColor: ColorPalette.unFocused),
             onPressed: () {
+              Preferences().requestNotiPerm = true;
               Navigator.of(context).pop();
             },
-            child: const Text('Cerrar'),
+            child: const Text('No preguntar denuevo'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: ColorPalette.primary),
+            onPressed: () async {
+              var permission = await NotificationPermissions
+                  .requestNotificationPermissions();
+              Preferences().requestNotiPerm = true;
+              Navigator.of(context).pop();
+            },
+            child: const Text('Aceptar'),
           ),
         ],
       );

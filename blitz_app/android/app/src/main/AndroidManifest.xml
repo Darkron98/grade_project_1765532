@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
    <application
         android:label="Blitz"
         android:name="${applicationName}"
@@ -44,6 +46,9 @@
         <meta-data 
             android:name ="com.google.android.geo.API_KEY" 
             android:value = "AIzaSyD9KHPOIW5Mka2Kt6eTmZzzW6jj7RgxDZQ"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/blitz_noti_icon" />
             <!-- Provide required visibility configuration for API level 30 and above -->
     </application>
     <queries>

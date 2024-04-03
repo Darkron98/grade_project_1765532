@@ -430,7 +430,11 @@ class _MenuDishListState extends State<MenuDishList> {
           child: BlocBuilder<MenuPrefsBloc, MenuPrefsState>(
             builder: (context, state) {
               return AlertDialog(
-                title: Text(state.loadingDelete ? 'Borrando' : 'Estas seguro?'),
+                backgroundColor: ColorPalette.background,
+                title: Text(
+                  state.loadingDelete ? 'Borrando' : 'Estas seguro?',
+                  style: const TextStyle(color: ColorPalette.textColor),
+                ),
                 content: state.loadingDelete
                     ? SizedBox(
                         width: 40,
@@ -450,8 +454,21 @@ class _MenuDishListState extends State<MenuDishList> {
                           ],
                         ),
                       )
-                    : const Text('Deseas borrar este elemento?'),
+                    : const Text(
+                        'Deseas borrar este elemento?',
+                        style: TextStyle(color: ColorPalette.textColor),
+                      ),
                 actions: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: ColorPalette.unFocused),
+                    onPressed: state.loadingDelete
+                        ? null
+                        : () {
+                            Navigator.of(context).pop();
+                          },
+                    child: const Text('Cerrar'),
+                  ),
                   BlocListener<MenuPrefsBloc, MenuPrefsState>(
                     listener: (context, state) {
                       if (state.delSuccess || state.delFailure) {
@@ -468,8 +485,7 @@ class _MenuDishListState extends State<MenuDishList> {
                     },
                     child: TextButton(
                       style: TextButton.styleFrom(
-                          foregroundColor:
-                              const Color.fromARGB(255, 86, 50, 136)),
+                          foregroundColor: ColorPalette.primary),
                       onPressed: state.loadingDelete
                           ? null
                           : () {
@@ -478,16 +494,6 @@ class _MenuDishListState extends State<MenuDishList> {
                             },
                       child: const Text('Aceptar'),
                     ),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        foregroundColor: ColorPalette.primary),
-                    onPressed: state.loadingDelete
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                          },
-                    child: const Text('Cerrar'),
                   ),
                 ],
               );

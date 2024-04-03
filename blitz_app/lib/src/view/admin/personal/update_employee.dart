@@ -355,8 +355,11 @@ Future<dynamic> customAlert(BuildContext context) {
                 }
               },
               child: AlertDialog(
-                title:
-                    Text(state.loadingDelete ? 'Procesando' : 'Estas seguro?'),
+                backgroundColor: ColorPalette.background,
+                title: Text(
+                  state.loadingDelete ? 'Procesando' : 'Estas seguro?',
+                  style: const TextStyle(color: ColorPalette.textColor),
+                ),
                 content: state.loadingDelete
                     ? SizedBox(
                         width: 40,
@@ -376,19 +379,20 @@ Future<dynamic> customAlert(BuildContext context) {
                           ],
                         ),
                       )
-                    : const Text('Deseas despedir a este empleado?'),
+                    : const Text(
+                        'Deseas despedir a este empleado?',
+                        style: TextStyle(color: ColorPalette.textColor),
+                      ),
                 actions: [
                   TextButton(
                     style: TextButton.styleFrom(
-                        foregroundColor:
-                            const Color.fromARGB(255, 86, 50, 136)),
+                        foregroundColor: ColorPalette.unFocused),
                     onPressed: state.loadingDelete
                         ? null
                         : () {
-                            BlocProvider.of<RegEmployeeBloc>(context)
-                                .add(const FireEmployee());
+                            Navigator.of(context).pop();
                           },
-                    child: const Text('Aceptar'),
+                    child: const Text('Cerrar'),
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
@@ -396,9 +400,10 @@ Future<dynamic> customAlert(BuildContext context) {
                     onPressed: state.loadingDelete
                         ? null
                         : () {
-                            Navigator.of(context).pop();
+                            BlocProvider.of<RegEmployeeBloc>(context)
+                                .add(const FireEmployee());
                           },
-                    child: const Text('Cerrar'),
+                    child: const Text('Aceptar'),
                   ),
                 ],
               ),

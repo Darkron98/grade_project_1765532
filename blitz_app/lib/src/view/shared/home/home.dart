@@ -113,23 +113,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            redirectionAlert(context);
-                          },
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: ColorPalette.cartIcons),
-                            child: const Icon(
-                              Remix.draft_line,
-                              color: ColorPalette.textColor,
-                              size: 30,
-                            ),
-                          ),
-                        ),
+                        Preferences().rol == 3
+                            ? GestureDetector(
+                                onTap: () {
+                                  redirectionAlert(context);
+                                },
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: ColorPalette.cartIcons),
+                                  child: const Icon(
+                                    Remix.draft_line,
+                                    color: ColorPalette.textColor,
+                                    size: 30,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),

@@ -45,6 +45,9 @@ class _OrderListState extends State<OrderList> {
   Widget build(BuildContext context) {
     return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
+        /* if (state.orders.isEmpty && !state.loadingOrders) {
+          BlocProvider.of<OrderBloc>(context).add(GetOrderList());
+        } */
         return BlocListener<OrderBloc, OrderState>(
           listener: (context, state) {
             if (state.shippingSuccess) {
@@ -145,9 +148,10 @@ class _OrderListState extends State<OrderList> {
                                               const EdgeInsets.only(top: 9),
                                           child: Icon(
                                             Remix.shopping_basket_line,
-                                            color: i == 0
-                                                ? ColorPalette.cartIcons
-                                                : ColorPalette.unFocused,
+                                            color:
+                                                i == 0 && Preferences().rol != 3
+                                                    ? ColorPalette.cartIcons
+                                                    : ColorPalette.unFocused,
                                           ),
                                         ),
                                   title: Row(
@@ -410,7 +414,8 @@ class _OrderListState extends State<OrderList> {
                               color: ColorPalette.lightBg,
                             ),
                             Text(
-                              'Sin ordenes aún.',
+                              'Sin ordenes aún\n(Actualizar)',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: ColorPalette.lightBg,
                                 fontSize: 24,

@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -394,6 +393,8 @@ Future<dynamic> orderAlert(BuildContext context) {
                         : () {
                             BlocProvider.of<OrderBloc>(context)
                                 .add(SubmmitOrder());
+                            BlocProvider.of<OrderBloc>(context)
+                                .add(GetOrderList());
                             Navigator.pop(context);
                           },
                     child: const Text('Aceptar'),

@@ -141,6 +141,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             List<OrderResp> resp2 = await MenuService().getOrders();
             emit(state.copyWith(orders: [], takeSuccess: resp.startsWith('2')));
             emit(state.copyWith(orders: resp2, takeSuccess: false));
+            emit(state.copyWith(loadingOrders: false));
             break;
           case ('ship'):
             resp = await MenuService().orderShipped(id);
@@ -148,6 +149,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             emit(state
                 .copyWith(orders: [], shippingSuccess: resp.startsWith('2')));
             emit(state.copyWith(orders: resp2, shippingSuccess: false));
+            emit(state.copyWith(loadingOrders: false));
             break;
           case ('cancel'):
             resp = await MenuService().cancelOrder(id);
@@ -155,11 +157,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             emit(state
                 .copyWith(orders: [], cancelSuccess: resp.startsWith('2')));
             emit(state.copyWith(orders: resp2, cancelSuccess: false));
+            emit(state.copyWith(loadingOrders: false));
             break;
           default:
             break;
         }
-        emit(state.copyWith(loadingOrders: false));
       },
     );
     on<GetOrderItems>(

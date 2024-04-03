@@ -1,9 +1,8 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grade_project_1765532/src/bloc/bloc.dart';
 import 'package:grade_project_1765532/src/core/logic/shared_preferences.dart';
-import 'package:grade_project_1765532/src/view/shared/login/widget/widgets.dart';
+import 'package:remixicon/remixicon.dart';
 
 import '../../../style/style.dart';
 import 'widgets/widgets.dart';
@@ -35,7 +34,7 @@ class _MapScreenState extends State<MapScreen> {
         BlocBuilder<MapBloc, MapState>(
           builder: (context, state) => OrderList(size: widget.size),
         ),
-        BlocBuilder<OrderBloc, OrderState>(
+        /* BlocBuilder<OrderBloc, OrderState>(
           builder: (context, state) {
             return CustomButton(
               size: widget.size,
@@ -61,7 +60,8 @@ class _MapScreenState extends State<MapScreen> {
                     ),
             );
           },
-        ),
+        ), */
+        const SizedBox(),
       ],
     );
   }
@@ -98,22 +98,56 @@ class _Tittle extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
-                left: 10,
-                right: 10,
-              ),
-              child: Text(
-                Preferences().rol == 3 ? 'Mis pedidos' : 'Pedidos',
-                style: const TextStyle(
-                  color: ColorPalette.textColor,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: Text(
+                    Preferences().rol == 3 ? 'Mis pedidos' : 'Pedidos',
+                    style: const TextStyle(
+                      color: ColorPalette.textColor,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(),
+            BlocBuilder<OrderBloc, OrderState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 15, top: 20),
+                  child: GestureDetector(
+                    onTap: state.loadingOrders
+                        ? null
+                        : () => BlocProvider.of<OrderBloc>(context)
+                            .add(GetOrderList()),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: state.loadingOrders
+                              ? ColorPalette.darkBg
+                              : ColorPalette.primary,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: state.loadingOrders
+                          ? const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: ColorPalette.primary),
+                            )
+                          : const Icon(Remix.restart_line,
+                              color: ColorPalette.textColor),
+                    ),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ],

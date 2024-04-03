@@ -62,4 +62,12 @@ class Preferences {
   bool get userContract {
     return _preferences.getBool('userContract') ?? false;
   }
+
+  set requestNotiPerm(bool value) {
+    _preferences.setBool('requestNotiPerm', value);
+  }
+
+  bool get requestNotiPerm {
+    return _preferences.getBool('requestNotiPerm') ?? false;
+  }
 }

@@ -20,13 +20,29 @@ Future<dynamic> cancelAlert(BuildContext context, int i) {
                 }
               },
               child: AlertDialog(
-                title: const Text('Estas seguro?'),
-                content: const Text('Deseas cancelar el pedido?'),
+                backgroundColor: ColorPalette.background,
+                title: const Text(
+                  'Estas seguro?',
+                  style: TextStyle(color: ColorPalette.textColor),
+                ),
+                content: const Text(
+                  'Deseas cancelar el pedido?',
+                  style: TextStyle(color: ColorPalette.textColor),
+                ),
                 actions: [
                   TextButton(
                     style: TextButton.styleFrom(
-                        foregroundColor:
-                            const Color.fromARGB(255, 86, 50, 136)),
+                        foregroundColor: ColorPalette.unFocused),
+                    onPressed: state.loadingOrder
+                        ? null
+                        : () {
+                            Navigator.of(context).pop();
+                          },
+                    child: const Text('Cerrar'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: ColorPalette.primary),
                     onPressed: state.loadingOrder
                         ? null
                         : () {
@@ -35,16 +51,6 @@ Future<dynamic> cancelAlert(BuildContext context, int i) {
                             Navigator.of(context).pop();
                           },
                     child: const Text('Aceptar'),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        foregroundColor: ColorPalette.primary),
-                    onPressed: state.loadingOrder
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                          },
-                    child: const Text('Cerrar'),
                   ),
                 ],
               ),
@@ -72,12 +78,25 @@ Future<dynamic> takeAlert(BuildContext context, int i) {
                 }
               },
               child: AlertDialog(
-                content: const Text('Desea tomar este pedido?'),
+                backgroundColor: ColorPalette.background,
+                content: const Text(
+                  'Desea tomar este pedido?',
+                  style: TextStyle(color: ColorPalette.textColor),
+                ),
                 actions: [
                   TextButton(
                     style: TextButton.styleFrom(
-                        foregroundColor:
-                            const Color.fromARGB(255, 86, 50, 136)),
+                        foregroundColor: ColorPalette.unFocused),
+                    onPressed: state.loadingOrder
+                        ? null
+                        : () {
+                            Navigator.of(context).pop();
+                          },
+                    child: const Text('Cerrar'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: ColorPalette.primary),
                     onPressed: state.loadingOrder
                         ? null
                         : () {
@@ -86,16 +105,6 @@ Future<dynamic> takeAlert(BuildContext context, int i) {
                             Navigator.of(context).pop();
                           },
                     child: const Text('Aceptar'),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        foregroundColor: ColorPalette.primary),
-                    onPressed: state.loadingOrder
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                          },
-                    child: const Text('Cerrar'),
                   ),
                 ],
               ),
@@ -123,12 +132,25 @@ Future<dynamic> shippAlert(BuildContext context, int i) {
                 }
               },
               child: AlertDialog(
-                content: const Text('El pedido sera marcado como entregado'),
+                backgroundColor: ColorPalette.background,
+                content: const Text(
+                  'El pedido sera marcado como entregado',
+                  style: TextStyle(color: ColorPalette.textColor),
+                ),
                 actions: [
                   TextButton(
                     style: TextButton.styleFrom(
-                        foregroundColor:
-                            const Color.fromARGB(255, 86, 50, 136)),
+                        foregroundColor: ColorPalette.unFocused),
+                    onPressed: state.loadingOrder
+                        ? null
+                        : () {
+                            Navigator.of(context).pop();
+                          },
+                    child: const Text('Cerrar'),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: ColorPalette.primary),
                     onPressed: state.loadingOrder
                         ? null
                         : () {
@@ -137,16 +159,6 @@ Future<dynamic> shippAlert(BuildContext context, int i) {
                             Navigator.of(context).pop();
                           },
                     child: const Text('Aceptar'),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        foregroundColor: ColorPalette.primary),
-                    onPressed: state.loadingOrder
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                          },
-                    child: const Text('Cerrar'),
                   ),
                 ],
               ),
