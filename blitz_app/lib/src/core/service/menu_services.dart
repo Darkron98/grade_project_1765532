@@ -22,8 +22,8 @@ abstract class MenuServiceInterface {
   Future<String> createOrder(OrderReq req);
   Future<List<OrderResp>> getOrders();
   Future<String> cancelOrder(String id);
-  Future<String> takeOrder(String id);
-  Future<String> orderShipped(String id);
+  Future<String> takeOrder(String id, String user);
+  Future<String> orderShipped(String id, String user);
   Future<List<OrderItem>> getItemsByOrderId(String id);
 }
 
@@ -307,7 +307,7 @@ class MenuService extends MenuServiceInterface {
         sendNotificationToTopic(
           channel: 'personal',
           title: 'Pedido cancelado',
-          message: 'Un cliente ha cancelado un pedido',
+          message: 'Un pedido ha sido cancelado',
         );
       }
       return response.statusCode.toString();
@@ -317,7 +317,7 @@ class MenuService extends MenuServiceInterface {
   }
 
   @override
-  Future<String> takeOrder(String id) async {
+  Future<String> takeOrder(String id, String user) async {
     try {
       Response response = await Dio().patch(
         '${cons.host}/order/take=$id',
@@ -325,8 +325,14 @@ class MenuService extends MenuServiceInterface {
       );
       if (response.statusCode.toString().startsWith('2')) {
         sendNotificationToTopic(
+          channel: user,
+          title: 'Pedido en camino',
+          message:
+              'Su pedido ha sido tomado por el delivery, no debería tardar.',
+        );
+        sendNotificationToTopic(
           channel: 'personal',
-          title: 'Pedidos actualizados',
+          title: 'Pedido tomado',
           message: 'La lista de pedidos se ha actualizado',
         );
       }
@@ -337,7 +343,7 @@ class MenuService extends MenuServiceInterface {
   }
 
   @override
-  Future<String> orderShipped(String id) async {
+  Future<String> orderShipped(String id, String user) async {
     try {
       Response response = await Dio().patch(
         '${cons.host}/order/shipped=$id',
@@ -345,8 +351,13 @@ class MenuService extends MenuServiceInterface {
       );
       if (response.statusCode.toString().startsWith('2')) {
         sendNotificationToTopic(
+          channel: user,
+          title: 'Pedido entregado',
+          message: 'Que lo disfrute.',
+        );
+        sendNotificationToTopic(
           channel: 'personal',
-          title: 'Pedidos actualizados',
+          title: 'Pedido entregado',
           message: 'La lista de pedidos se ha actualizado',
         );
       }

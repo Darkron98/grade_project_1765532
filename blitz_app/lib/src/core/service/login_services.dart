@@ -16,8 +16,8 @@ class LoginServices extends LoginServicesInterface {
   @override
   Future<AuthResp> userAuthenticate(User user) async {
     Map<String, dynamic> body = {
-      "user_name": user.user,
-      "password": user.pass,
+      "user_name": user.user.replaceAll(' ', ''),
+      "password": user.pass.replaceAll(' ', ''),
     };
 
     try {

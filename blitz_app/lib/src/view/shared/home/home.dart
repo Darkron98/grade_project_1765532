@@ -204,22 +204,52 @@ class BottomNavBar extends StatelessWidget {
                     : ColorPalette.unFocused,
                 size: state.indexPage == 0 ? 35 : null,
               ),
-              NavIcon(
-                width: size.width,
-                onTap: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  BlocProvider.of<HomeBloc>(context).add(const ChangePage(1));
-                  _pageController.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
+              BlocBuilder<OrderBloc, OrderState>(
+                builder: (context, orderState) {
+                  return Stack(
+                    children: [
+                      NavIcon(
+                        width: size.width,
+                        onTap: () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(const ChangePage(1));
+                          _pageController.animateToPage(
+                            1,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        icon: Remix.shopping_cart_line,
+                        color: state.indexPage == 1
+                            ? ColorPalette.primary
+                            : ColorPalette.unFocused,
+                        size: state.indexPage == 1 ? 35 : null,
+                      ),
+                      if (orderState.orderItems.isNotEmpty &&
+                          state.indexPage != 1) ...[
+                        Positioned(
+                          right: 25,
+                          top: 15,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                                color: ColorPalette.cartIcons,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Center(
+                                child: Text(
+                              orderState.orderItems.length.toString(),
+                              style: const TextStyle(
+                                  color: ColorPalette.textColor,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ),
+                      ],
+                    ],
                   );
                 },
-                icon: Remix.shopping_cart_line,
-                color: state.indexPage == 1
-                    ? ColorPalette.primary
-                    : ColorPalette.unFocused,
-                size: state.indexPage == 1 ? 35 : null,
               ),
               NavIcon(
                 width: size.width,

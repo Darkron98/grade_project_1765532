@@ -39,7 +39,7 @@ class Register extends StatelessWidget {
                         helper: 'Minimo 3 caracteres (solo letras)',
                         formatter: [
                           FilteringTextInputFormatter.allow(
-                              RegExp(r'[a-zA-Z]+')),
+                              RegExp(r'[a-zA-Z\s]+')),
                         ],
                       ),
                       CustomFormField(

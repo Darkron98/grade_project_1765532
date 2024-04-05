@@ -133,18 +133,19 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<UpdateOrder>(
       (event, emit) async {
         String id = state.orders[event.index].id;
+        String user = state.orders[event.index].owner;
         String resp;
         emit(state.copyWith(loadingOrders: true));
         switch (event.operation) {
           case ('take'):
-            resp = await MenuService().takeOrder(id);
+            resp = await MenuService().takeOrder(id, user);
             List<OrderResp> resp2 = await MenuService().getOrders();
             emit(state.copyWith(orders: [], takeSuccess: resp.startsWith('2')));
             emit(state.copyWith(orders: resp2, takeSuccess: false));
             emit(state.copyWith(loadingOrders: false));
             break;
           case ('ship'):
-            resp = await MenuService().orderShipped(id);
+            resp = await MenuService().orderShipped(id, user);
             List<OrderResp> resp2 = await MenuService().getOrders();
             emit(state
                 .copyWith(orders: [], shippingSuccess: resp.startsWith('2')));

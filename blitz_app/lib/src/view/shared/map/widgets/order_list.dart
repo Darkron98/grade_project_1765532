@@ -168,6 +168,28 @@ class _OrderListState extends State<OrderList> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      const SizedBox(width: 20),
+                                      Container(
+                                        padding: const EdgeInsets.all(2.5),
+                                        decoration: BoxDecoration(
+                                            color: state.orders[i].taken
+                                                ? ColorPalette.takeButton
+                                                : const Color.fromARGB(
+                                                    255, 252, 226, 201),
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: Text(
+                                          state.orders[i].taken
+                                              ? 'En camino'
+                                              : 'En proceso',
+                                          style: TextStyle(
+                                              color: state.orders[i].taken
+                                                  ? ColorPalette.takeIcon
+                                                  : ColorPalette.cartIcons,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   subtitle: Row(
@@ -344,21 +366,23 @@ class _OrderListState extends State<OrderList> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () => cancelAlert(context, i),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            color: ColorPalette.cancelButton,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: const Icon(
-                                          Remix.forbid_line,
-                                          size: 35,
-                                          color: ColorPalette.primary,
+                                    if (!state.orders[i].taken) ...[
+                                      GestureDetector(
+                                        onTap: () => cancelAlert(context, i),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: ColorPalette.cancelButton,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: const Icon(
+                                            Remix.forbid_line,
+                                            size: 35,
+                                            color: ColorPalette.primary,
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                     if (state.orders[i].taken &&
                                         Preferences().rol != 3) ...[
                                       GestureDetector(

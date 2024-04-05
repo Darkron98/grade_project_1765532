@@ -23,12 +23,19 @@ void customSnackbar(
     ..showSnackBar(
       SnackBar(
         backgroundColor: Colors.transparent,
-        dismissDirection: DismissDirection.startToEnd,
+        dismissDirection: DismissDirection.up,
         elevation: 0,
-        content: SizedBox(
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
+        /* behavior: SnackBarBehavior.floating, */
+        /* margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height - 175,
+        ), */
+        /* padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height - 175,
+        ), */
+        content: Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            height: 50,
             child: Container(
               height: 50,
               decoration: BoxDecoration(
